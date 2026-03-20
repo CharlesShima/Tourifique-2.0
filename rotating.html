@@ -90,8 +90,6 @@
     cursor: grab;
     user-select: none;
     margin-bottom: 0;
-    transform: translateZ(0); /* Hardware acceleration to stop scroll cracking */
-    will-change: transform;
   }
   .stage:active { cursor: grabbing; }
 
@@ -101,9 +99,8 @@
     width: 0; height: 0;
     transform-style: preserve-3d;
     /* JS drives rotateY; we only set up the initial */
-    transform: translate(-50%, -50%) rotateX(-4deg) rotateY(0deg) translateZ(0);
+    transform: translate(-50%, -50%) rotateX(-4deg) rotateY(0deg);
     transition: transform 0.05s linear;
-    will-change: transform; /* Hint to browser to create a composite layer */
   }
   .carousel.easing {
     transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -118,8 +115,6 @@
     border-radius: 32px;
     cursor: pointer;
     transition: filter 0.4s, opacity 0.4s;
-    backface-visibility: hidden;
-    will-change: transform, filter, opacity;
   }
 
   /* phone shell */
@@ -380,20 +375,6 @@
   .pay-icon { font-size:18px; }
   .pay-btn { background:var(--yellow); color:var(--purple-dark);  font-weight:800; font-size:16px; border:none; border-radius:16px; padding:18px; width:100%; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 8px 28px rgba(255,214,0,.25); }
   .secure { text-align:center; font-size:11px; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:5px; padding-bottom:8px; }
-  
-  /* Responsive Iframe Scaling for Tablets and Phones */
-  @media (max-width: 1024px) {
-    .stage {
-      transform: scale(0.85) translateZ(0);
-      transform-origin: top center;
-    }
-  }
-  @media (max-width: 600px) {
-    .stage {
-      transform: scale(0.65) translateZ(0);
-      transform-origin: top center;
-    }
-  }
 </style>
 </head>
 <body>
