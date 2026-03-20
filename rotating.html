@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tourifique – 3D Carousel</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-dark:  #1A0E3A;
+    --purple-mid:   #2D1A5E;
+    --purple-main:  #6B47C8;
+    --purple-light: #9B7FD4;
+    --purple-pale:  #C4AEFA;
+    --purple-bg:    #EDE8FF;
+    --yellow:       #FFD600;
+    --yellow-dk:    #C8A800;
+    --white:        #FFFFFF;
+    --muted:        #7B6AA0;
+    --card-bg:      #120928;
+    --radius:       18px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #05010F;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+
+  /* ── Background ── */
+  .bg-layer {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+  .bg-layer canvas { width: 100%; height: 100%; display: block; }
+
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); pointer-events: none; z-index: 0;
+  }
+  .orb1 { width:600px; height:600px; top:-100px; left:-150px; background:radial-gradient(circle,#3B1A7A55,transparent 70%); }
+  .orb2 { width:500px; height:500px; bottom:-80px; right:-120px; background:radial-gradient(circle,#6B47C822,transparent 70%); }
+  .orb3 { width:350px; height:350px; top:40%; left:50%; transform:translate(-50%,-50%); background:radial-gradient(circle,#FFD60008,transparent 70%); }
+
+  /* ── Header ── */
+  header {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 52px 24px 0;
+    text-align: center;
+  }
+  .logo {
+     font-weight: 800; font-size: 26px;
+    letter-spacing: -0.5px; color: #fff;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 18px;
+  }
+  .logo span.y { color: var(--yellow); }
+  .logo-dot { width:8px; height:8px; border-radius:50%; background:var(--purple-main); }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--purple-pale); margin-bottom: 12px;
+  }
+  h1 {
+     font-weight: 800;
+    font-size: clamp(28px, 5vw, 52px); line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--purple-pale));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 14px;
+  }
+  .hero-sub {
+    font-size: 15px; color: var(--muted); max-width: 420px; line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  /* ── Stage ── */
+  .stage {
+    position: relative; z-index: 10;
+    width: 100vw;
+    height: 500px;
+    perspective: 1400px;
+    perspective-origin: 50% 48%;
+    cursor: grab;
+    user-select: none;
+    margin-bottom: 0;
+  }
+  .stage:active { cursor: grabbing; }
+
+  .carousel {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    transform-style: preserve-3d;
+    /* JS drives rotateY; we only set up the initial */
+    transform: translate(-50%, -50%) rotateX(-4deg) rotateY(0deg);
+    transition: transform 0.05s linear;
+  }
+  .carousel.easing {
+    transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Each card is a phone frame */
+  .card {
+    position: absolute;
+    width: 200px; height: 415px;
+    top: -207px; left: -100px;
+    transform-style: preserve-3d;
+    border-radius: 32px;
+    cursor: pointer;
+    transition: filter 0.4s, opacity 0.4s;
+  }
+
+  /* phone shell */
+  .phone-shell { 
+    position: absolute; inset: 0;
+    border-radius: 32px;
+    background: linear-gradient(145deg, #1e1236 0%, #0c0618 100%);
+    box-shadow:
+      0 0 0 1.5px rgba(107,71,200,.35),
+      0 0 0 3px rgba(255,255,255,.04),
+      0 30px 80px rgba(0,0,0,.75),
+      0 0 60px rgba(107,71,200,.08),
+      inset 0 1px 0 rgba(255,255,255,.07);
+    overflow: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Dynamic Island style notch */
+  .notch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 88px; height: 26px;
+    background: #05010F;
+    border-radius: 20px; z-index: 20;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .notch-cam { width:10px; height:10px; border-radius:50%; background:#111; border:1.5px solid #222; }
+  .notch-pill { width:40px; height:6px; border-radius:4px; background:#111; }
+
+  /* Side buttons */
+  .btn-side {
+    position: absolute; border-radius: 3px;
+    background: linear-gradient(to right, #1a0e3a, #2d1a5e);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .btn-vol1 { left: -3px; top: 90px; width: 3px; height: 28px; }
+  .btn-vol2 { left: -3px; top: 126px; width: 3px; height: 28px; }
+  .btn-pwr  { right: -3px; top: 108px; width: 3px; height: 42px; }
+
+  /* Screen content scrolls inside */
+  .screen-wrap {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 32px; overflow: hidden;
+  }
+  .screen-inner {
+    position: absolute; top: 0; left: 0;
+    width: 390px; height: auto;
+    transform-origin: top left;
+    transform: scale(0.513);
+  }
+
+  /* Gloss overlay on phone */
+  .gloss {
+    position: absolute; inset: 0; border-radius: 32px; pointer-events: none; z-index: 15;
+    background: linear-gradient(135deg,
+      rgba(255,255,255,.07) 0%,
+      rgba(255,255,255,.01) 40%,
+      transparent 60%,
+      rgba(0,0,0,.18) 100%);
+  }
+
+  /* ── Screen label ── */
+  .screen-label {
+    position: absolute;
+    bottom: -50px; left: 50%; transform: translateX(-50%);
+    white-space: nowrap;
+     font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--purple-pale); opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .card.active .screen-label { opacity: 1; }
+
+  /* active card glow */
+  .card.active .phone-shell { 
+    box-shadow:
+      0 0 0 1.5px rgba(107,71,200,.6),
+      0 0 0 3px rgba(107,71,200,.12),
+      0 40px 100px rgba(0,0,0,.8),
+      0 0 80px rgba(107,71,200,.22),
+      inset 0 1px 0 rgba(255,255,255,.1);
+  }
+  /* dim non-focused cards */
+  .card.side { filter: brightness(0.55) saturate(0.7); opacity: 0.7; }
+  .card.back  { filter: brightness(0.25) saturate(0.4); opacity: 0.4; }
+
+  /* ── Ground reflection ── */
+  .ground {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 80px;
+    background: radial-gradient(ellipse at center, rgba(107,71,200,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    position: relative; z-index: 10;
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 10px; margin-bottom: 48px;
+  }
+  .ctrl-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(107,71,200,.12);
+    border: 1.5px solid rgba(107,71,200,.3);
+    color: var(--purple-pale); font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .2s, border-color .2s, transform .15s;
+  }
+  .ctrl-btn:hover { background: rgba(107,71,200,.25); border-color: var(--purple-main); transform: scale(1.08); }
+
+  .dots { display: flex; gap: 7px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(107,71,200,.3); transition: all .35s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--yellow); width: 20px; border-radius: 4px; }
+
+  /* ── Auto-rotate hint ── */
+  .hint {
+    position: relative; z-index: 10;
+    font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 60px; display: flex; align-items: center; gap: 7px;
+  }
+  .hint-dot { width:5px; height:5px; border-radius:50%; background:var(--yellow); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+
+  /* ══════════════════════════════════════════
+     SCREEN CONTENT (scaled copies)
+  ══════════════════════════════════════════ */
+  .bottom-nav {
+    display:flex; justify-content:space-around; align-items:center;
+    padding:14px 20px 22px; background:var(--card-bg);
+    border-top:1px solid rgba(255,255,255,.06);
+  }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; color:var(--muted); }
+  .nav-item.active { color:var(--yellow); }
+  .nav-icon { font-size:18px; }
+  .nav-icon.home-ring {
+    width:44px; height:44px; background:var(--purple-main); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+    margin-top:-14px; box-shadow:0 0 0 4px var(--card-bg), 0 4px 16px rgba(107,71,200,.5);
+  }
+
+  /* Screen 1 */
+  .reel-wrap { position:relative; height:640px; overflow:hidden; }
+  .reel-scene { position:absolute; inset:0; overflow:hidden; }
+  .reel-scene svg { width:100%; height:100%; }
+  .reel-top-bar { position:absolute; top:50px; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:0 18px; z-index:10; }
+  .reel-tabs { display:flex; gap:6px; }
+  .tab-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:20px; padding:5px 14px; font-size:13px; font-weight:500; color:var(--white); }
+  .tab-pill.active { background:var(--purple-main); border-color:var(--purple-main); }
+  .avatar-sm { width:36px; height:36px; border-radius:50%; border:2px solid var(--yellow); background:linear-gradient(135deg,var(--purple-main),var(--purple-dark)); display:flex; align-items:center; justify-content:center;  font-size:14px; font-weight:700; color:var(--yellow); }
+  .reel-progress { position:absolute; right:5px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:4px; z-index:10; }
+  .r-dot { width:3px; height:20px; border-radius:2px; background:rgba(255,255,255,.2); }
+  .r-dot.active { background:var(--yellow); height:32px; }
+  .reel-sidebar { position:absolute; right:14px; bottom:210px; display:flex; flex-direction:column; gap:20px; align-items:center; z-index:10; }
+  .s-action { display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .s-icon { width:42px; height:42px; border-radius:50%; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow: 0 4px 10px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.2); color:white; }
+  .s-count { font-size:11px; color:rgba(255,255,255,.65); }
+  .reel-bottom { position:absolute; bottom:0; left:0; right:0; padding:0 18px 26px; background:linear-gradient(to top,rgba(6,2,21,.97) 0%,transparent 100%); z-index:10; }
+  .creator-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .creator-av { width:40px; height:40px; border-radius:50%; border:2px solid var(--yellow); background:linear-gradient(135deg,#6B47C8,#3B2072); display:flex; align-items:center; justify-content:center;  font-size:15px; font-weight:700; color:var(--yellow); }
+  .creator-name {  font-weight:700; font-size:14px; }
+  .creator-handle { font-size:12px; color:var(--purple-pale); }
+  .follow-pill { margin-left:auto; border:1.5px solid var(--yellow); border-radius:20px; padding:4px 14px; font-size:12px; font-weight:600; color:var(--yellow);  white-space:nowrap; }
+  .reel-title {  font-size:22px; font-weight:800; line-height:1.15; margin-bottom:7px; }
+  .reel-meta { font-size:13px; color:rgba(255,255,255,.65); margin-bottom:14px; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .mdot { color:var(--purple-pale); }
+  .tag-row { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .tag { background:rgba(107,71,200,.18); border:1px solid rgba(107,71,200,.4); border-radius:20px; padding:3px 10px; font-size:11px; color:var(--purple-pale); font-weight:500; }
+  .view-btn { width:100%; background:var(--purple-main); color:white;  font-weight:800; font-size:15px; border:none; border-radius:14px; padding:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 6px 24px rgba(107,71,200,.45); }
+  .price-badge { background:var(--yellow); color:var(--purple-dark); border-radius:8px; padding:2px 9px; font-size:13px; font-weight:700; }
+
+  /* Screen 2 */
+  .itin-hero { position:relative; height:260px; overflow:hidden; }
+  .itin-back,.itin-share { position:absolute; top:50px; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; font-size:15px; z-index:5; }
+  .itin-back { left:18px; } .itin-share { right:18px; }
+  .itin-hero-content { position:absolute; bottom:18px; left:20px; right:20px; z-index:5; }
+  .itin-badge { display:inline-flex; align-items:center; gap:5px; background:var(--yellow); color:var(--purple-dark);  font-weight:700; font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 10px; border-radius:20px; margin-bottom:8px; }
+  .itin-title {  font-size:24px; font-weight:800; line-height:1.15; margin-bottom:6px; }
+  .itin-sub { font-size:13px; color:rgba(255,255,255,.65); display:flex; align-items:center; gap:8px; }
+  .itin-stats { display:flex; padding:16px 20px; border-bottom:1px solid rgba(107,71,200,.12); }
+  .stat-item { flex:1; text-align:center; border-right:1px solid rgba(107,71,200,.12); }
+  .stat-item:last-child { border-right:none; }
+  .stat-val {  font-weight:800; font-size:20px; color:var(--yellow); }
+  .stat-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+  .itin-body { padding:18px; display:flex; flex-direction:column; gap:14px; }
+  .day-header { display:flex; align-items:center; gap:10px; }
+  .day-pill { background:var(--purple-main); color:white;  font-weight:800; font-size:10px; letter-spacing:1px; padding:4px 12px; border-radius:20px; }
+  .day-pill.gold { background:var(--yellow); color:var(--purple-dark); }
+  .day-name {  font-weight:600; font-size:14px; }
+  .act-card { background:var(--card-bg); border-radius:var(--radius); overflow:hidden; border:1px solid rgba(107,71,200,.15); }
+  .act-img { height:130px; position:relative; overflow:hidden; }
+  .act-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(6,2,21,.75) 0%,transparent 60%); }
+  .act-tag { position:absolute; top:10px; left:10px; background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.15); border-radius:20px; padding:3px 10px; font-size:11px; }
+  .act-time { position:absolute; bottom:10px; right:10px; background:var(--purple-main); color:white;  font-weight:700; font-size:11px; border-radius:6px; padding:3px 8px; }
+  .act-body { padding:14px 14px 16px; }
+  .act-name {  font-weight:700; font-size:15px; margin-bottom:5px; }
+  .act-desc { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:12px; }
+  .act-foot { display:flex; align-items:center; justify-content:space-between; }
+  .act-price {  font-weight:800; font-size:16px; color:var(--yellow); }
+  .act-price span { font-size:11px; color:var(--muted);  font-weight:400; }
+  .incl-btn { background:rgba(107,71,200,.15); border:1.5px solid var(--purple-main); border-radius:10px; color:var(--purple-pale);  font-weight:700; font-size:12px; padding:7px 14px; cursor:pointer; }
+  .add-btn { background:rgba(255,214,0,.1); border:1.5px solid var(--yellow); border-radius:10px; color:var(--yellow);  font-weight:700; font-size:12px; padding:7px 14px; cursor:pointer; }
+  .itin-cta { margin:4px 18px 28px; background:var(--yellow); color:var(--purple-dark);  font-weight:800; font-size:16px; border:none; border-radius:16px; padding:17px; width:calc(100% - 36px); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 6px 24px rgba(255,214,0,.25); }
+
+  /* Screen 3 */
+  .co-header { padding:50px 20px 18px; border-bottom:1px solid rgba(107,71,200,.15); }
+  .co-back-row { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+  .back-circle { width:36px; height:36px; border-radius:50%; background:var(--card-bg); border:1px solid rgba(107,71,200,.3); display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .co-title {  font-weight:800; font-size:22px; }
+  .step-track { display:flex; align-items:center; margin-bottom:8px; }
+  .step-seg { flex:1; height:3px; background:rgba(255,255,255,.08); border-radius:2px; }
+  .step-seg.done { background:var(--purple-main); }
+  .step-seg.active { background:linear-gradient(90deg,var(--purple-main),rgba(107,71,200,.3)); }
+  .step-gap { width:5px; }
+  .step-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); }
+  .step-labels .al { color:var(--purple-pale); font-weight:600; }
+  .co-body { padding:18px; display:flex; flex-direction:column; gap:16px; }
+  .sum-card { background:var(--card-bg); border-radius:var(--radius); border:1px solid rgba(107,71,200,.15); overflow:hidden; }
+  .sum-hero { height:110px; position:relative; background:linear-gradient(135deg,#1A0E3A 0%,#2D1A5E 100%); display:flex; align-items:flex-end; padding:12px 14px; }
+  .sum-hero-lbl {  font-weight:700; font-size:16px; }
+  .sum-hero-sub { font-size:12px; color:rgba(255,255,255,.55); }
+  .sum-badge { position:absolute; top:12px; right:14px; background:var(--yellow); color:var(--purple-dark);  font-weight:800; font-size:11px; padding:4px 10px; border-radius:20px; }
+  .sum-details { padding:14px; display:flex; flex-direction:column; gap:10px; }
+  .d-row { display:flex; align-items:center; justify-content:space-between; }
+  .d-key { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+  .d-val { font-size:13px; font-weight:500; }
+  .d-val.pur { color:var(--purple-pale); }
+  .date-strip { background:var(--card-bg); border-radius:var(--radius); border:1px solid rgba(107,71,200,.15); padding:16px; }
+  .ds-lbl {  font-weight:700; font-size:13px; margin-bottom:12px; }
+  .date-chips { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+  .date-chips::-webkit-scrollbar { display:none; }
+  .d-chip { flex-shrink:0; background:rgba(107,71,200,.08); border:1px solid rgba(107,71,200,.2); border-radius:12px; padding:10px 14px; text-align:center; cursor:pointer; }
+  .d-chip.sel { background:rgba(107,71,200,.22); border-color:var(--purple-main); }
+  .d-num {  font-weight:700; font-size:17px; color:var(--white); }
+  .d-chip.sel .d-num { color:var(--purple-pale); }
+  .d-day { font-size:10px; color:var(--muted); }
+  .d-chip.sel .d-day { color:var(--purple-pale); }
+  .guests-card { background:var(--card-bg); border-radius:var(--radius); border:1px solid rgba(107,71,200,.15); padding:16px; }
+  .g-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+  .g-lbl {  font-weight:700; font-size:13px; }
+  .ctr-row { display:flex; align-items:center; gap:14px; }
+  .ctr-btn { width:32px; height:32px; border-radius:50%; border:1.5px solid rgba(107,71,200,.3); background:rgba(107,71,200,.1); color:var(--white); font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .ctr-btn.plus { border-color:var(--yellow); color:var(--yellow); background:rgba(255,214,0,.08); }
+  .ctr-val {  font-weight:800; font-size:18px; }
+  .g-sub { font-size:11px; color:var(--muted); }
+  .price-card { background:var(--card-bg); border-radius:var(--radius); border:1px solid rgba(107,71,200,.15); padding:16px; }
+  .p-lbl {  font-weight:700; font-size:13px; margin-bottom:14px; }
+  .p-line { display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,.7); margin-bottom:10px; }
+  .p-line.total { border-top:1px solid rgba(107,71,200,.2); padding-top:12px; margin-top:4px;  font-weight:800; font-size:17px; color:var(--white); }
+  .p-line.total .amt { color:var(--yellow); }
+  .p-line .disc { color:var(--purple-pale); }
+  .pay-methods { display:flex; gap:8px; }
+  .pay-chip { flex:1; background:var(--card-bg); border:1.5px solid rgba(107,71,200,.2); border-radius:12px; padding:12px; text-align:center; cursor:pointer; font-size:11px; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .pay-chip.sel { border-color:var(--yellow); background:rgba(255,214,0,.07); color:var(--yellow); }
+  .pay-icon { font-size:18px; }
+  .pay-btn { background:var(--yellow); color:var(--purple-dark);  font-weight:800; font-size:16px; border:none; border-radius:16px; padding:18px; width:100%; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 8px 28px rgba(255,214,0,.25); }
+  .secure { text-align:center; font-size:11px; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:5px; padding-bottom:8px; }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+
+
+<div class="stage" id="stage">
+  <div class="carousel easing" id="carousel">
+    <!-- Cards injected by JS -->
+  </div>
+  <div class="ground"></div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="prev">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <button class="ctrl-btn" id="next">&#8594;</button>
+</div>
+
+<div class="hint"><span class="hint-dot"></span>Slow rotating · Hover to pause · Drag to spin</div>
+
+<script>
+/* ───────────────────────────────────────────
+   Screen HTML fragments
+─────────────────────────────────────────── */
+const screens = [
+  {
+    label: "① Discovery Reel",
+    html: `
+<div class="reel-wrap">
+  <div class="reel-scene">
+    <video src="Media/SummitVanderbit.mp4" autoplay loop muted playsinline oncanplay="this.playbackRate = 2.0" style="position: absolute; width: 100%; height: 100%; object-fit: cover;"></video>
+  </div>
+  <div class="reel-progress">
+    <div class="r-dot"></div><div class="r-dot active"></div>
+    <div class="r-dot"></div><div class="r-dot"></div>
+  </div>
+  <div class="reel-top-bar">
+    <div class="reel-tabs">
+      <div class="tab-pill">Following</div>
+      <div class="tab-pill active">For You</div>
+    </div>
+    <div class="avatar-sm">A</div>
+  </div>
+  <div class="reel-sidebar">
+    <div class="s-action"><div class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div><span class="s-count">38.2k</span></div>
+    <div class="s-action"><div class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><span class="s-count">1.4k</span></div>
+    <div class="s-action"><div class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></div><span class="s-count">Share</span></div>
+    <div class="s-action"><div class="s-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></div><span class="s-count">Save</span></div>
+  </div>
+  <div class="reel-bottom">
+    <div class="creator-row">
+      <div class="creator-av">A</div>
+      <div><div class="creator-name">Amara Kente</div><div class="creator-handle">@amarakente · Gold TM</div></div>
+      <div class="follow-pill">+ Follow</div>
+    </div>
+    <div class="reel-title">SUMMIT One Vanderbilt —<br>NYC Above the Clouds</div>
+    <div class="reel-meta"><span>📍 Midtown, New York</span><span class="mdot">·</span><span>1–2 hrs</span><span class="mdot">·</span><span>⭐ 4.9</span></div>
+    <div class="tag-row">
+      <div class="tag">City</div><div class="tag">Observation Deck</div><div class="tag">Immersive</div>
+    </div>
+    <button class="view-btn">Book now <span class="price-badge">from $48</span> →</button>
+  </div>
+</div>
+<div class="bottom-nav">
+  <div class="nav-item"><div class="nav-icon">🔍</div><span>Explore</span></div>
+  <div class="nav-item"><div class="nav-icon">🗺️</div><span>Map</span></div>
+  <div class="nav-item active"><div class="nav-icon home-ring">▶</div></div>
+  <div class="nav-item"><div class="nav-icon">💼</div><span>Trips</span></div>
+  <div class="nav-item"><div class="nav-icon">👤</div><span>Profile</span></div>
+</div>`
+  },
+  {
+    label: "② Experience Details",
+    html: `
+<div class="itin-hero">
+  <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A0E3A"/><stop offset="100%" stop-color="#060215"/></linearGradient>
+      <radialGradient id="hglow" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#6B47C8" stop-opacity=".28"/><stop offset="100%" stop-color="#6B47C8" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="390" height="260" fill="url(#hg)"/>
+    <rect width="390" height="260" fill="url(#hglow)"/>
+    <rect x="148" y="0" width="94" height="260" fill="#2D1A5E" opacity=".85"/>
+    <rect x="156" y="0" width="78" height="28" fill="#3B2072" opacity=".9"/>
+    <rect x="164" y="0" width="62" height="14" fill="#4A2888" opacity=".8"/>
+    <rect x="170" y="0" width="50" height="8" fill="#6B47C8" opacity=".7"/>
+    <rect x="152" y="35" width="5" height="7" fill="#FFD600" opacity=".65" rx="1"/>
+    <rect x="174" y="32" width="5" height="7" fill="#FFD600" opacity=".7" rx="1"/>
+    <rect x="196" y="35" width="5" height="7" fill="#FFD600" opacity=".65" rx="1"/>
+    <rect x="218" y="35" width="5" height="7" fill="#FFD600" opacity=".55" rx="1"/>
+    <rect x="152" y="52" width="5" height="7" fill="#C4AEFA" opacity=".4" rx="1"/>
+    <rect x="178" y="52" width="5" height="7" fill="#FFD600" opacity=".65" rx="1"/>
+    <rect x="204" y="52" width="5" height="7" fill="#FFD600" opacity=".55" rx="1"/>
+    <ellipse cx="195" cy="120" rx="85" ry="60" fill="#6B47C8" opacity=".1"/>
+    <rect x="0" y="190" width="390" height="70" fill="#060215" opacity=".65"/>
+  </svg>
+  <div class="itin-back">←</div>
+  <div class="itin-share">↗</div>
+  <div class="itin-hero-content">
+    <div class="itin-badge">⭐ 4.9 · 1,842 Reviews</div>
+    <div class="itin-title">SUMMIT One Vanderbilt<br>Immersive Experience</div>
+    <div class="itin-sub"><span>📍 Midtown Manhattan, NYC</span><span>·</span><span>1–2 hrs</span></div>
+  </div>
+</div>
+<div class="itin-stats">
+  <div class="stat-item"><div class="stat-val">4</div><div class="stat-lbl">Floors</div></div>
+  <div class="stat-item"><div class="stat-val">1,401</div><div class="stat-lbl">Ft High</div></div>
+  <div class="stat-item"><div class="stat-val">360°</div><div class="stat-lbl">Views</div></div>
+  <div class="stat-item"><div class="stat-val">$48</div><div class="stat-lbl">Per Person</div></div>
+</div>
+<div class="itin-body">
+  <div class="day-header"><div class="day-pill">HIGHLIGHT 1</div><div class="day-name">The Immersive Floors</div></div>
+  <div class="act-card">
+    <div class="act-img">
+      <svg style="width:100%;height:100%;display:block;" viewBox="0 0 350 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="350" height="130" fill="#1A0E3A"/>
+        <ellipse cx="175" cy="65" rx="180" ry="80" fill="#2D1A5E" opacity=".5"/>
+        <rect x="22" y="18" width="60" height="58" fill="#3B2072" opacity=".3" rx="4"/>
+        <rect x="92" y="13" width="60" height="63" fill="#2D1A5E" opacity=".4" rx="4"/>
+        <rect x="162" y="18" width="60" height="58" fill="#3B2072" opacity=".3" rx="4"/>
+        <rect x="232" y="13" width="60" height="63" fill="#2D1A5E" opacity=".4" rx="4"/>
+        <ellipse cx="175" cy="52" rx="50" ry="28" fill="#9B7FD4" opacity=".1"/>
+      </svg>
+      <div class="act-overlay"></div>
+      <div class="act-tag">🏙️ Immersive</div>
+      <div class="act-time">Open Daily</div>
+    </div>
+    <div class="act-body">
+      <div class="act-name">Glass Floor & Infinity Mirror Rooms</div>
+      <div class="act-desc">Walk above Manhattan on glass floors at 1,401 ft. Step inside mirrored infinity rooms — a multi-sensory experience.</div>
+      <div class="act-foot"><div class="act-price">$48 <span>/ person</span></div><button class="incl-btn">✓ Included</button></div>
+    </div>
+  </div>
+  <div class="day-header" style="margin-top:2px;"><div class="day-pill gold">HIGHLIGHT 2</div><div class="day-name">Skyline Dining Add-On</div></div>
+  <div class="act-card" style="border:1.5px dashed rgba(107,71,200,.3);">
+    <div class="act-img">
+      <svg style="width:100%;height:100%;display:block;" viewBox="0 0 350 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="350" height="130" fill="#120928"/>
+        <rect x="60" y="28" width="22" height="102" fill="#2D1A5E" opacity=".9"/>
+        <rect x="132" y="38" width="25" height="92" fill="#200840" opacity=".8"/>
+        <rect x="232" y="33" width="28" height="97" fill="#2D1A5E" opacity=".8"/>
+        <ellipse cx="175" cy="78" rx="180" ry="28" fill="#6B47C8" opacity=".07"/>
+      </svg>
+      <div class="act-overlay"></div>
+      <div class="act-tag">🍾 Rooftop Bar</div>
+      <div class="act-time">5 PM – Close</div>
+    </div>
+    <div class="act-body">
+      <div class="act-name">Le Pavillon Rooftop Dining</div>
+      <div class="act-desc">Optional add-on: cocktails and dinner at the rooftop restaurant with panoramic Empire State Building views.</div>
+      <div class="act-foot"><div class="act-price" style="color:var(--muted)">$65+ <span>/ person</span></div><button class="add-btn">+ Add On</button></div>
+    </div>
+  </div>
+</div>
+<button class="itin-cta">Book Now — $48/person →</button>
+<div class="bottom-nav">
+  <div class="nav-item"><div class="nav-icon">🔍</div><span>Explore</span></div>
+  <div class="nav-item"><div class="nav-icon">🗺️</div><span>Map</span></div>
+  <div class="nav-item"><div class="nav-icon home-ring">▶</div></div>
+  <div class="nav-item active"><div class="nav-icon">💼</div><span>Trips</span></div>
+  <div class="nav-item"><div class="nav-icon">👤</div><span>Profile</span></div>
+</div>`
+  },
+  {
+    label: "③ Checkout",
+    html: `
+<style>
+.co-wrap { background:#060215; min-height:100%;  color:#fff; position: relative; padding-bottom: 0px; overflow: hidden; display: flex; flex-direction: column; }
+.co-header { display:flex; align-items:center; padding: 24px 16px 12px; gap:16px; background: #060215; z-index:10; flex-shrink: 0;}
+.co-back { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; cursor:pointer;}
+.co-title { flex:1;  font-size:16px; font-weight:700;}
+.co-step { font-size:11px; color:#C4AEFA; font-weight:600; background:rgba(107,71,200,0.15); padding:4px 10px; border-radius:12px; }
+
+.co-body { padding: 0 16px; display:flex; flex-direction:column; gap:12px; flex: 1; overflow-y: auto;}
+.co-body::-webkit-scrollbar { display: none; }
+
+/* Experience Summary */
+.co-exp { background: linear-gradient(135deg, rgba(107,71,200,0.2) 0%, rgba(26,14,58,0) 100%), #120928; border: 1px solid rgba(107,71,200,0.3); border-radius: 14px; padding: 12px; position:relative; overflow:hidden;}
+.co-exp::before { content:''; position:absolute; top:-20px; right:-20px; width:100px; height:100px; background:radial-gradient(circle, rgba(255,214,0,0.1) 0%, transparent 70%); }
+.co-exp-title {  font-size:16px; font-weight:700; margin-bottom:4px; }
+.co-exp-sub { font-size:11px; color:#C4AEFA; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.co-exp-rating { background:rgba(255,214,0,0.15); color:#FFD600; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+
+.co-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.co-item { display:flex; gap:8px; align-items:center;}
+.co-item-icon { font-size:14px; background:rgba(255,255,255,0.05); width:24px; height:24px; display:flex; align-items:center; justify-content:center; border-radius:6px;}
+.co-item-text { display:flex; flex-direction:column; gap:2px; }
+.co-item-lbl { font-size:9px; color:#7B6AA0; text-transform:uppercase; letter-spacing:0.5px;}
+.co-item-val { font-size:11px; font-weight:500; }
+
+/* Date & Guests */
+.co-section { background: #120928; border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding:12px; }
+.co-sec-heading {  font-size:13px; font-weight:700; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;}
+
+.date-list { display:flex; gap:8px; overflow-x:auto; padding-bottom: 2px;}
+.date-list::-webkit-scrollbar { display: none; }
+.date-box { border:1px solid rgba(107,71,200,0.3); border-radius:10px; padding:8px 0; min-width:48px; text-align:center; color:#7B6AA0;}
+.date-box.active { background:#6B47C8; border-color:#6B47C8; color:#fff;}
+.d-mon { font-size:9px; text-transform:uppercase; margin-bottom:2px;}
+.d-num {  font-size:14px; font-weight:700;}
+
+.guest-ctrl { display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.05);}
+.g-info { font-size:12px; color:#fff; }
+.g-sub { font-size:10px; color:#7B6AA0; margin-top:2px;}
+.g-stepper { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); padding:4px; border-radius:16px; }
+.g-btn { width:24px; height:24px; border-radius:50%; background:none; border:1px solid rgba(255,255,255,0.2); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+.g-val {  font-weight:700; font-size:12px;}
+
+/* Payment Method */
+.pay-tabs { display:flex; background:rgba(255,255,255,0.05); border-radius:10px; padding:4px; }
+.pay-tab { flex:1; text-align:center; padding:8px 0; font-size:11px; font-weight:600; color:#7B6AA0; border-radius:8px; cursor:pointer;}
+.pay-tab.active { background:#6B47C8; color:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+
+/* Price Breakdown */
+.price-row { display:flex; justify-content:space-between; font-size:12px; color:#C4AEFA; margin-bottom:8px;}
+.price-row.discount { color:#10B981; }
+.price-divider { height:1px; background:rgba(255,255,255,0.1); margin:10px 0;}
+.price-total { display:flex; justify-content:space-between; align-items:center; }
+.p-total-lbl { font-size:13px; font-weight:500;}
+.p-total-val {  font-size:18px; font-weight:800; color:#FFD600;}
+
+/* Bottom Action */
+.co-bottom { padding:12px 16px 20px; flex-shrink: 0;}
+.btn-pay { background:#FFD600; color:#1A0E3A;  font-size:15px; font-weight:800; padding:14px; border-radius:14px; border:none; width:100%; display:flex; justify-content:center; align-items:center; gap:6px; box-shadow:0 6px 20px rgba(255,214,0,0.25); cursor:pointer; margin-bottom:10px;}
+.co-secure { text-align:center; font-size:10px; color:#7B6AA0; display:flex; align-items:center; justify-content:center; gap:6px;}
+
+</style>
+<div class="co-wrap">
+  <div class="co-header">
+    <div class="co-back">←</div>
+    <div class="co-title">Checkout</div>
+    <div class="co-step">Secure</div>
+  </div>
+
+  <div class="co-body">
+    <!-- Experience Summary -->
+    <div class="co-exp">
+      <div class="co-exp-title">SUMMIT One Vanderbilt</div>
+      <div class="co-exp-sub">Midtown NYC · 1,401 ft up <span class="co-exp-rating">⭐ 4.9</span></div>
+      
+      <div class="co-grid">
+        <div class="co-item">
+          <div class="co-item-icon">⏱️</div>
+          <div class="co-item-text"><span class="co-item-lbl">Duration</span><span class="co-item-val">1–2 Hours</span></div>
+        </div>
+        <div class="co-item">
+          <div class="co-item-icon">🏙️</div>
+          <div class="co-item-text"><span class="co-item-lbl">Location</span><span class="co-item-val">1 Vanderbilt, NYC</span></div>
+        </div>
+        <div class="co-item">
+          <div class="co-item-icon">🎟️</div>
+          <div class="co-item-text"><span class="co-item-lbl">Ticket Type</span><span class="co-item-val">Gen. Admission</span></div>
+        </div>
+        <div class="co-item">
+          <div class="co-item-icon" style="background:#6B47C8;color:white;font-size:11px;">A</div>
+          <div class="co-item-text"><span class="co-item-lbl">Curated By</span><span class="co-item-val" style="color:#C4AEFA;">@amarakente</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date & Guests -->
+    <div class="co-section">
+      <div class="co-sec-heading">Visit Details <span style="color:#6B47C8;font-size:10px;font-weight:600;background:rgba(107,71,200,0.15);padding:4px 8px;border-radius:6px;">Edit</span></div>
+      
+      <div class="date-list">
+        <div class="date-box"><div class="d-mon">Apr</div><div class="d-num">18</div></div>
+        <div class="date-box active"><div class="d-mon">Apr</div><div class="d-num">19</div></div>
+        <div class="date-box"><div class="d-mon">Apr</div><div class="d-num">20</div></div>
+        <div class="date-box"><div class="d-mon">Apr</div><div class="d-num">21</div></div>
+        <div class="date-box"><div class="d-mon">Apr</div><div class="d-num">22</div></div>
+      </div>
+
+      <div class="guest-ctrl">
+        <div>
+          <div class="g-info">2 Guests · $48/pp</div>
+          <div class="g-sub">All-inclusive admission</div>
+        </div>
+        <div class="g-stepper">
+          <div class="g-btn">−</div>
+          <div class="g-val">2</div>
+          <div class="g-btn">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="co-section">
+      <div class="co-sec-heading">Payment Method</div>
+      <div class="pay-tabs">
+        <div class="pay-tab active">💳 Card</div>
+        <div class="pay-tab">📱 Mobile Pay</div>
+        <div class="pay-tab">🏦 Bank</div>
+      </div>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="co-section">
+      <div class="co-sec-heading">Price Breakdown</div>
+      <div class="price-row"><span>$48 × 2 guests</span><span>$96.00</span></div>
+      <div class="price-row"><span>Platform fee</span><span>$2.40</span></div>
+      <div class="price-row discount"><span>Creator discount</span><span>−$9.60</span></div>
+      <div class="price-divider"></div>
+      <div class="price-total">
+        <span class="p-total-lbl">Total Due</span>
+        <span class="p-total-val">$88.80</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="co-bottom">
+    <button class="btn-pay">🔒 Pay $88.80 Now</button>
+    <div class="co-secure">🔐 Secured by Tourifique · Free cancellation 24hrs before</div>
+  </div>
+</div>`
+  }
+];
+
+/* ───────────────────────────────────────────
+   Carousel Setup — continuous slow rotation
+─────────────────────────────────────────── */
+const N      = screens.length;
+const RADIUS = 260;
+const SPEED  = 0.04; // degrees per ms — medium cruise speed
+
+const carousel = document.getElementById('carousel');
+const dotsEl   = document.getElementById('dots');
+
+let angle       = 0;       // current carousel rotation (degrees)
+let velocity    = SPEED;   // deg/ms — positive = forward spin
+let paused      = false;   // true while hovering or dragging
+let lastTime    = null;
+let rafId       = null;
+
+// Drag state
+let dragStart      = null;
+let angleAtDrag    = 0;
+let isDragging     = false;
+
+// Build cards
+screens.forEach((sc, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.index = i;
+  const cardAngle = (360 / N) * i;
+  card.style.transform = `rotateY(${cardAngle}deg) translateZ(${RADIUS}px)`;
+  card.innerHTML = `
+    <div class="phone-shell">
+      <div class="notch">
+        <div class="notch-cam"></div>
+        <div class="notch-pill"></div>
+        <div class="notch-cam"></div>
+      </div>
+      <div class="screen-wrap">
+        <div class="screen-inner">${sc.html}</div>
+      </div>
+      <div class="gloss"></div>
+    </div>
+    <div class="btn-side btn-vol1"></div>
+    <div class="btn-side btn-vol2"></div>
+    <div class="btn-side btn-pwr"></div>
+    <div class="screen-label">${sc.label}</div>
+  `;
+  carousel.appendChild(card);
+
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => {
+    // nudge carousel to land on this card
+    const step = 360 / N;
+    const target = -step * i;
+    // find closest equivalent angle
+    let diff = ((target - angle) % 360 + 360) % 360;
+    if (diff > 180) diff -= 360;
+    angle += diff;
+  });
+  dotsEl.appendChild(dot);
+});
+
+/* ── Render loop ── */
+function tick(ts) {
+  if (lastTime === null) lastTime = ts;
+  const dt = ts - lastTime;
+  lastTime = ts;
+
+  if (!paused && !isDragging) {
+    angle += velocity * dt;
+  }
+
+  carousel.style.transform = `translate(-50%, -50%) rotateX(-4deg) rotateY(${angle}deg)`;
+  updateActiveStates();
+  rafId = requestAnimationFrame(tick);
+}
+
+function updateActiveStates() {
+  const step  = 360 / N;
+  const norm  = (((-angle % 360) + 360) % 360); // 0–360, which card is front
+  const front = Math.round(norm / step) % N;
+
+  const cards = carousel.querySelectorAll('.card');
+  const dots  = dotsEl.querySelectorAll('.dot');
+  cards.forEach((c, i) => {
+    const diff = Math.abs(((i - front) % N + N) % N);
+    const cls  = diff === 0 ? 'active' : (diff === 1 || diff === N - 1) ? 'side' : 'back';
+    if (!c.classList.contains(cls)) {
+      c.className = 'card ' + cls;
+    }
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === front));
+}
+
+/* ── Pause on hover ── */
+const stage = document.getElementById('stage');
+stage.addEventListener('mouseenter', () => { paused = true; });
+stage.addEventListener('mouseleave', () => { if (!isDragging) paused = false; });
+
+/* ── Drag to spin ── */
+stage.addEventListener('pointerdown', e => {
+  dragStart   = e.clientX;
+  angleAtDrag = angle;
+  isDragging  = false;
+  paused      = true;
+  carousel.classList.remove('easing');
+  stage.setPointerCapture(e.pointerId);
+});
+
+stage.addEventListener('pointermove', e => {
+  if (dragStart === null) return;
+  const dx = e.clientX - dragStart;
+  if (Math.abs(dx) > 4) isDragging = true;
+  if (!isDragging) return;
+  angle = angleAtDrag + dx * 0.35;
+});
+
+stage.addEventListener('pointerup', e => {
+  if (dragStart === null) return;
+  dragStart  = null;
+  isDragging = false;
+  paused     = false; // resume slow spin
+});
+
+/* ── Arrow buttons ── */
+document.getElementById('prev').addEventListener('click', () => { angle -= 360 / N; });
+document.getElementById('next').addEventListener('click', () => { angle += 360 / N; });
+
+// Kick off
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

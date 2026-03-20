@@ -71,8 +71,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 90vh;
-    padding: 64px 52px;
+    min-height: auto;
+    padding: 8px 52px 64px;
     gap: 48px;
     background: linear-gradient(135deg, var(--off-white) 0%, #EDE8FF 50%, #F8F5FF 100%);
     position: relative;
@@ -319,9 +319,222 @@
     <img src="TourifiqueLogo(3) (1).png" alt="Tourifique Logo" style="height: 85px; width: auto; object-fit: contain;" />
   </a>
   <div style="display:flex;gap:10px;align-items:center;">
-    <button class="btn-primary-sm">Join waitlist</button>
+    <button class="btn-primary-sm" id="navWlBtn">Join waitlist</button>
   </div>
 </nav>
+
+<!-- NAVBAR WAITLIST MODAL -->
+<div id="navbarWlModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:1000;animation:fadeIn 0.3s ease-out;justify-content:center;align-items:center;">
+  <div class="role-modal-content" style="animation:slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;background:linear-gradient(135deg, #1A0E3A 0%, #2D1B4E 100%);border:1px solid rgba(255, 246, 41, 0.2);border-radius:32px;padding:48px;max-width:600px;width:90%;box-shadow:0 25px 80px rgba(59, 32, 114, 0.4);position:relative;">
+    <div style="position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(255, 246, 41, 0.5), transparent);border-radius:32px 32px 0 0;"></div>
+    
+    <div id="navWlEmailStep" style="display:none;flex-direction:column;gap:24px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:20px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:34px;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.5px;">Join our waitlist</div>
+        <div class="modal-subtitle" style="font-size:16px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Enter your email to get early access and exclusive benefits</div>
+      </div>
+      
+      <div class="modern-input-group">
+        <input class="modern-input" type="email" placeholder="Email" id="navWlEmail" />
+        <label class="modern-label">Email Address</label>
+      </div>
+      <div id="navEmailError" style="color:#FF6B6B;font-size:13px;opacity:0;transition:opacity 0.3s ease;height:20px;pointer-events:none;">Please enter a valid email address</div>
+      
+      <div style="display:flex;gap:12px;">
+        <button type="button" id="navWlCancel" class="btn-modal btn-cancel" style="flex:1;padding:14px 24px;">Cancel</button>
+        <button type="button" id="navWlSubmitEmail" class="btn-modal btn-submit" style="flex:1;padding:14px 24px;display:flex;align-items:center;justify-content:center;">
+          <span class="btn-text">Join waitlist</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+    
+    <div id="navWlRoleStep" style="display:flex;flex-direction:column;gap:24px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:20px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:34px;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.5px;">Choose your role</div>
+        <div class="modal-subtitle" style="font-size:16px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Tell us how you'll use Tourifique to get early access and exclusive benefits</div>
+      </div>
+
+      <form id="navRoleForm" style="display:flex;flex-direction:column;gap:24px;">
+        <div class="role-options" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;">
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="navCb-traveler" name="role" value="traveler" style="display:none;" />
+            <label for="navCb-traveler" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Traveler</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">Discover & book amazing travel experiences</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="navCb-travelpreneur" name="role" value="travelpreneur" style="display:none;" />
+            <label for="navCb-travelpreneur" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Travelpreneur™</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">Create a store & earn on every booking</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="navCb-supplier" name="role" value="supplier" style="display:none;" />
+            <label for="navCb-supplier" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Supplier</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">List premium travel experiences</div>
+                <div class="nyc-badge" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255, 246, 41, 0.15);border:0.5px solid rgba(255, 246, 41, 0.4);border-radius:100px;padding:2px 8px;font-size:10px;color:var(--yellow);margin-top:4px;font-weight:600;">🗽 NYC only</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="error-msg" id="navRoleError" style="color:#FF6B6B;font-size:13px;margin-top:10px;text-align:center;opacity:0;transition:opacity 0.3s ease;">Please select a role</div>
+
+        <div class="modal-actions" style="display:flex;gap:12px;">
+          <button type="button" class="btn-modal btn-cancel" id="navBtnCancelRole" style="flex:1;padding:14px 24px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Back</button>
+          <button type="submit" class="btn-modal btn-submit" id="navBtnSubmitRole" disabled style="flex:1;padding:14px 24px;border:none;border-radius:100px;font-family:'Sora', sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:var(--yellow);color:#1A0E3A;">Continue</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TRAVELER FORM -->
+    <div id="navWlTravelerForm" style="display:none;flex-direction:column;gap:12px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Traveler!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Tell us a bit about yourself</div>
+      </div>
+      
+      <form id="travelerFormBody" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="travelerFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="travelerLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="travelerEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="travelerError" style="color:#FF6B6B;font-size:13px;opacity:0;transition:opacity 0.3s ease;">Please fill in all fields</div>
+        
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="navBtnBackTraveler" style="flex:1;padding:12px 20px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="navBtnSubmitTraveler" style="flex:1;padding:12px 20px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- SUPPLIER FORM -->
+    <div id="navWlSupplierForm" style="display:none;flex-direction:column;gap:12px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Supplier!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Let's get your business set up</div>
+      </div>
+      
+      <form id="supplierFormBody" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="supplierFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="supplierLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Company Name" id="supplierCompanyName" class="modern-input" />
+          <label class="modern-label">Company Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="supplierEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="supplierError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="navBtnBackSupplier" style="flex:1;padding:12px 20px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="navBtnSubmitSupplier" style="flex:1;padding:12px 20px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TRAVELPRENEUR FORM with Modern Social Media Animation -->
+    <div id="navWlTravelpreneurForm" style="display:none;flex-direction:column;gap:14px;max-height:85vh;overflow-y:auto;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:26px;font-weight:700;color:white;margin-bottom:6px;letter-spacing:-0.5px;">Welcome, Travelpreneur™!</div>
+        <div class="modal-subtitle" style="font-size:13px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Build your travel store</div>
+      </div>
+      
+      <form id="travelpreneurFormBody" style="display:flex;flex-direction:column;gap:10px;">
+        <input type="text" placeholder="First Name" id="travelpreneurFirstName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="text" placeholder="Last Name" id="travelpreneurLastName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="email" placeholder="Email" id="travelpreneurEmail" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        
+        <!-- Social Media Handles with Modern Animation -->
+        <div style="margin-top:8px;padding:12px;background:rgba(107, 71, 200, 0.15);border-radius:16px;border:1.5px solid rgba(255, 246, 41, 0.2);">
+          <div style="font-family:'Sora', sans-serif;font-size:12px;font-weight:600;color:rgba(255, 246, 41, 0.9);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Social Media Platforms</div>
+          
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <!-- TikTok -->
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #25F4EE 0%, #FF0050 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;flex-shrink:0;box-shadow:0 4px 12px rgba(37, 244, 238, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 1 1-4.77-2.3A2.4 2.4 0 0 1 9.1 13.46V9.4a6.11 6.11 0 0 0-8.87 6.06A6.11 6.11 0 0 0 9.1 21.46a6 6 0 0 0 6.1-5.9v-3.14a7.88 7.88 0 0 0 4.79 1.8v-3.64a5.07 5.07 0 0 1-.6-.05z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_tiktok_handle" id="tiktokHandle" class="social-input" data-platform="tiktok" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="tiktok-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+            
+            <!-- Instagram -->
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #FE7957 0%, #B80E7F 50%, #7C1EA8 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(254, 121, 87, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="white" stroke-width="2"/><circle cx="18.5" cy="5.5" r="1.5" fill="white"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_instagram_handle" id="instagramHandle" class="social-input" data-platform="instagram" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="instagram-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+            
+            <!-- Snapchat -->
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:#FFFC00;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255, 252, 0, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1A0E3A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5zm5 0s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_snapchat_handle" id="snapchatHandle" class="social-input" data-platform="snapchat" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="snapchat-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div id="travelpreneurError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="navBtnBackTravelpreneur" style="flex:1;padding:11px 18px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="navBtnSubmitTravelpreneur" style="flex:1;padding:11px 18px;border:none;border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:var(--yellow);color:#1A0E3A;">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
 <!-- HERO -->
@@ -343,18 +556,12 @@
     </div>
     <p class="hero-sub">Discover the world's most beautiful travel experiences through short-form video. Watch, fall in love, and book — all in one swipe.</p>
     <div class="hero-ctas">
-      <a class="btn-hero-primary" href="#">
+      <a class="btn-hero-primary" href="#" id="heroWlBtn">
         Join Waitlist
       </a>
       
     </div>
-    <div style="display: flex; justify-content: center; width: 100%; margin-top: -10px; margin-bottom: 20px;">
-      <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 30px; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 500; color: var(--violet); box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-        <span>Backed by <strong style="color:var(--violet);font-weight:700;">The Founder's Game</strong></span>
-      </div>
-    </div>
   </div>
-
 
   <!-- PHONE MOCKUP -->
   <div class="hero-visual">
@@ -419,6 +626,57 @@
               let isPopular = true;
               const pillBox = document.getElementById('trending-pill');
 
+              // Content data for each slide
+              const slideContents = {
+                baseballGame: {
+                  category: 'Sports · Live Event',
+                  name: 'Baseball Game<br>New York Yankees Vs Kansas City Royals Baseball Game',
+                  meta: 'by @NYCYankees · 4.8 ★ · 892 booked',
+                  price: 'From $ 48.40'
+                },
+                broadwayShow: {
+                  category: 'Theater · Broadway',
+                  name: 'Broadway Show<br>Lion King',
+                  meta: 'by @BroadwayNYC · 4.9 ★ · 5,420 booked',
+                  price: 'From $133.40'
+                },
+                summitAscent: {
+                  category: 'Observation · Immersive Art',
+                  name: 'NYC Skyline Thrill:<br>SUMMIT Ascent',
+                  meta: 'by @NYCExperiences · 4.9 ★ · 1,240 booked',
+                  price: 'From $ 68.99'
+                }
+              };
+
+              // Function to update phone bottom content
+              function updatePhoneContent() {
+                const expCategory = document.querySelector('.exp-category');
+                const expName = document.querySelector('.exp-name');
+                const expMeta = document.querySelector('.exp-meta');
+                const bookPrice = document.querySelector('.book-price');
+                
+                let currentContent;
+                
+                if (inHorizontalMode) {
+                  // In horizontal mode
+                  if (currentHSlide === 0) {
+                    currentContent = slideContents.broadwayShow;
+                  } else {
+                    currentContent = slideContents.summitAscent;
+                  }
+                } else {
+                  // In vertical mode, showing first slide (Baseball)
+                  currentContent = slideContents.baseballGame;
+                }
+                
+                if (expCategory && expName && expMeta && bookPrice) {
+                  expCategory.textContent = currentContent.category;
+                  expName.innerHTML = currentContent.name;
+                  expMeta.textContent = currentContent.meta;
+                  bookPrice.textContent = currentContent.price;
+                }
+              }
+
               setInterval(() => {
                 if (pillBox) {
                   pillBox.style.opacity = '0';
@@ -467,7 +725,13 @@
                     hTrack.style.transform = `translateX(-${currentHSlide * 100}%)`;
                   }
                 }
+                
+                // Update content after carousel moves
+                updatePhoneContent();
               }, 2000);
+
+              // Update content on initial load
+              updatePhoneContent();
             });
           </script>
 
@@ -495,12 +759,12 @@
 
 
             <div class="phone-bottom">
-              <div class="exp-category">Observation · Immersive Art</div>
-              <div class="exp-name">NYC Skyline Thrill:<br>SUMMIT Ascent</div>
-              <div class="exp-meta">by @NYCExperiences · 4.9 ★ · 1,240 booked</div>
+              <div class="exp-category">Sports · Live Event</div>
+              <div class="exp-name">Baseball Game<br>New York Yankees Vs Kansas City Royals Baseball Game</div>
+              <div class="exp-meta">by @NYCYankees · 4.8 ★ · 892 booked</div>
               <div class="book-bar">
                 <span class="book-label">Book now</span>
-                <span class="book-price">From $ 68.99</span>
+                <span class="book-price">From $ 48.40</span>
               </div>
             </div>
 
@@ -528,7 +792,211 @@
       </div>
     </div>
   </div>
+
+  <div style="grid-column: 1 / -1; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: -80px; margin-bottom: -50px; gap: 4px; position: relative; z-index: 10;">
+    <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 30px; font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 500; color: var(--violet); box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+      <span>Backed by <strong style="color:var(--violet);font-weight:700;">The Founder's Game</strong></span>
+    </div>
+    <img src="foundef_games-removebg-preview.png" alt="The Founder's Game Logo" style="height: 80px; width: auto; object-fit: contain; filter: brightness(0); margin-top: -10px; margin-bottom: -80px;">
+  </div>
 </section>
+
+<!-- HERO WAITLIST MODAL -->
+<div id="heroWlModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:1000;animation:fadeIn 0.3s ease-out;justify-content:center;align-items:center;">
+  <div class="role-modal-content" style="animation:slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;background:linear-gradient(135deg, #1A0E3A 0%, #2D1B4E 100%);border:1px solid rgba(255, 246, 41, 0.2);border-radius:32px;padding:48px;max-width:600px;width:90%;box-shadow:0 25px 80px rgba(59, 32, 114, 0.4);position:relative;">
+    <div style="position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(255, 246, 41, 0.5), transparent);border-radius:32px 32px 0 0;"></div>
+    
+    <div id="heroWlEmailStep" style="display:none;flex-direction:column;gap:24px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:20px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:34px;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.5px;">Join our waitlist</div>
+        <div class="modal-subtitle" style="font-size:16px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Enter your email to get early access and exclusive benefits</div>
+      </div>
+      
+      <div class="modern-input-group">
+        <input class="modern-input" type="email" placeholder="Email" id="heroWlEmail" />
+        <label class="modern-label">Email Address</label>
+      </div>
+      <div id="heroEmailError" style="color:#FF6B6B;font-size:13px;opacity:0;transition:opacity 0.3s ease;height:20px;pointer-events:none;">Please enter a valid email address</div>
+      
+      <div style="display:flex;gap:12px;">
+        <button type="button" id="heroWlCancel" class="btn-modal btn-cancel" style="flex:1;padding:14px 24px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Cancel</button>
+        <button type="button" id="heroWlSubmitEmail" class="btn-modal btn-submit" style="flex:1;padding:14px 24px;display:flex;align-items:center;justify-content:center;">
+          <span class="btn-text">Join waitlist</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+    
+    <div id="heroWlRoleStep" style="display:flex;flex-direction:column;gap:24px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:20px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:34px;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.5px;">Get early access!</div>
+        <div class="modal-subtitle" style="font-size:16px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Tell us how you'll use Tourifique to get early access and exclusive benefits</div>
+      </div>
+
+      <form id="heroRoleForm" style="display:flex;flex-direction:column;gap:24px;">
+        <div class="role-options" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;">
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="heroCb-traveler" name="role" value="traveler" style="display:none;" />
+            <label for="heroCb-traveler" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Traveler</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">Discover & book amazing travel experiences</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="heroCb-travelpreneur" name="role" value="travelpreneur" style="display:none;" />
+            <label for="heroCb-travelpreneur" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Travelpreneur™</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">Create a store & earn on every booking</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option" style="position:relative;">
+            <input type="checkbox" id="heroCb-supplier" name="role" value="supplier" style="display:none;" />
+            <label for="heroCb-supplier" style="display:flex;align-items:flex-start;gap:14px;padding:20px;border:2px solid rgba(107, 71, 200, 0.3);border-radius:16px;cursor:pointer;transition:all 0.3s ease;background:rgba(107, 71, 200, 0.05);">
+              <div class="checkbox-custom" style="width:22px;height:22px;border:2px solid rgba(255, 246, 41, 0.4);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.3s ease;"></div>
+              <div class="role-label-content" style="flex:1;">
+                <div class="role-name" style="font-family:'Sora', sans-serif;font-size:15px;font-weight:600;color:white;margin-bottom:4px;">Supplier</div>
+                <div class="role-desc" style="font-size:13px;color:rgba(255, 255, 255, 0.5);line-height:1.5;">List premium travel experiences</div>
+                <div class="nyc-badge" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255, 246, 41, 0.15);border:0.5px solid rgba(255, 246, 41, 0.4);border-radius:100px;padding:2px 8px;font-size:10px;color:var(--yellow);margin-top:4px;font-weight:600;">🗽 NYC only</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="error-msg" id="heroRoleError" style="color:#FF6B6B;font-size:13px;margin-top:10px;text-align:center;opacity:0;transition:opacity 0.3s ease;">Please select a role</div>
+
+        <div class="modal-actions" style="display:flex;gap:12px;">
+          <button type="button" class="btn-modal btn-cancel" id="heroBtnCancelRole" style="flex:1;padding:14px 24px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Back</button>
+          <button type="submit" class="btn-modal btn-submit" id="heroBtnSubmitRole" disabled style="flex:1;padding:14px 24px;border:none;border-radius:100px;font-family:'Sora', sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:var(--yellow);color:#1A0E3A;">Continue</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HERO TRAVELER FORM -->
+    <div id="heroWlTravelerForm" style="display:none;flex-direction:column;gap:12px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Traveler!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Tell us a bit about yourself</div>
+      </div>
+      <form id="heroTravelerForm" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="heroTravelerFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="heroTravelerLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="heroTravelerEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="heroTravelerError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="heroWlBackTraveler" style="flex:1;padding:12px 20px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="heroWlSubmitTraveler" style="flex:1;padding:12px 20px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HERO SUPPLIER FORM -->
+    <div id="heroWlSupplierForm" style="display:none;flex-direction:column;gap:12px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Supplier!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Let's get your business set up</div>
+      </div>
+      <form id="heroSupplierForm" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="heroSupplierFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="heroSupplierLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Company Name" id="heroSupplierCompanyName" class="modern-input" />
+          <label class="modern-label">Company Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="heroSupplierEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="heroSupplierError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="heroWlBackSupplier" style="flex:1;padding:12px 20px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="heroWlSubmitSupplier" style="flex:1;padding:12px 20px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HERO TRAVELPRENEUR FORM -->
+    <div id="heroWlTravelpreneurForm" style="display:none;flex-direction:column;gap:14px;max-height:85vh;overflow-y:auto;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:26px;font-weight:700;color:white;margin-bottom:6px;letter-spacing:-0.5px;">Welcome, Travelpreneur™!</div>
+        <div class="modal-subtitle" style="font-size:13px;color:rgba(255, 255, 255, 0.65);line-height:1.6;">Build your travel store</div>
+      </div>
+      <form id="heroTravelpreneurForm" style="display:flex;flex-direction:column;gap:10px;">
+        <input type="text" placeholder="First Name" id="heroTravelpreneurFirstName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="text" placeholder="Last Name" id="heroTravelpreneurLastName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="email" placeholder="Email" id="heroTravelpreneurEmail" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <div style="margin-top:8px;padding:12px;background:rgba(107, 71, 200, 0.15);border-radius:16px;border:1.5px solid rgba(255, 246, 41, 0.2);">
+          <div style="font-family:'Sora', sans-serif;font-size:12px;font-weight:600;color:rgba(255, 246, 41, 0.9);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Social Media Platforms</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #25F4EE 0%, #FF0050 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;flex-shrink:0;box-shadow:0 4px 12px rgba(37, 244, 238, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 1 1-4.77-2.3A2.4 2.4 0 0 1 9.1 13.46V9.4a6.11 6.11 0 0 0-8.87 6.06A6.11 6.11 0 0 0 9.1 21.46a6 6 0 0 0 6.1-5.9v-3.14a7.88 7.88 0 0 0 4.79 1.8v-3.64a5.07 5.07 0 0 1-.6-.05z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_tiktok_handle" id="heroTiktokHandle" class="social-input" data-platform="tiktok" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="hero-tiktok-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #FE7957 0%, #B80E7F 50%, #7C1EA8 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(254, 121, 87, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="white" stroke-width="2"/><circle cx="18.5" cy="5.5" r="1.5" fill="white"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_instagram_handle" id="heroInstagramHandle" class="social-input" data-platform="instagram" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="hero-instagram-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:#FFFC00;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255, 252, 0, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1A0E3A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5zm5 0s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_snapchat_handle" id="heroSnapchatHandle" class="social-input" data-platform="snapchat" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="hero-snapchat-warning" style="font-size:10px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:12px;white-space:nowrap;"></div>
+            </div>
+          </div>
+        </div>
+        <div id="heroTravelpreneurError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="heroWlBackTravelpreneur" style="flex:1;padding:11px 18px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="heroWlSubmitTravelpreneur" style="flex:1;padding:11px 18px;border:none;border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:var(--yellow);color:#1A0E3A;">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
 <!-- AUDIENCE -->
@@ -556,22 +1024,7 @@
       </ul>
       <button class="btn-panel"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="3,2 13,7 3,12" fill="white"/></svg>Watch Experiences</button>
     </div>
-    <div class="panel-cards">
-      <div class="p-card">
-        <div class="pc-title">Avg rating</div>
-        <div class="pc-val">4.9★</div>
-        <div class="pc-sub">Verified bookings only</div>
-      </div>
-      <div class="p-card dark">
-        <div class="pc-title white">Experiences</div>
-        <div class="pc-val yellow">2,400+</div>
-        <div class="pc-sub white">Across 84 countries</div>
-      </div>
-      <div class="p-card wide">
-        <div class="pc-title" style="margin-bottom:4px;">Instant booking</div>
-        <div style="font-size: 17px;color:#4A3070;font-weight:300;">From video to confirmed booking in under 60 seconds</div>
-      </div>
-    </div>
+   <iframe src="rotating.html" style="width:100%;height:590px;border:none;overflow:hidden;" scrolling="no"></iframe>
   </div>
 
 
@@ -664,7 +1117,7 @@
             Niecey B
             
           </div>
-          <div class="profile-handle">@amarakente · New York City</div>
+          <div class="profile-handle">@Niecey B · New York City</div>
           <div class="profile-bio">Curating NYC's most extraordinary experiences & Afrocentric travel. Born in Accra, based in Harlem.</div>
 
           <div class="profile-stats">
@@ -981,26 +1434,526 @@
     Launching in <strong style="color:var(--yellow);font-weight:600;">New York</strong> &nbsp;·&nbsp; Spring 2026
   </p>
   <p class="wl-sub">Join the waitlist and get early access, exclusive creator spots, and a founding member badge.</p>
-  <div style="display:flex;gap:20px;align-items:flex-start;max-width:680px;margin:0 auto 28px;position:relative;z-index:1;flex-wrap:wrap;justify-content:center;">
-    <div class="wl-form" style="margin:0;flex:1;min-width:260px;">
-      <input class="wl-input" type="email" placeholder="your@email.com" id="wl-email"/>
-      <button class="wl-btn" id="wl-btn">Join waitlist</button>
+  <button class="wl-btn" id="wl-btn">Join waitlist</button>
+
+  <!-- ROLE SELECTION MODAL -->
+  <div id="roleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:1000;animation:fadeIn 0.3s ease-out;justify-content:center;align-items:center;">
+    <style>
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes slideUp { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+      @keyframes shimmer { 0%, 100% { background-position: -1000px 0; } 50% { background-position: 1000px 0; } }
+      
+      .role-modal-content {
+        animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        background: linear-gradient(135deg, #1A0E3A 0%, #2D1B4E 100%);
+        border: 1px solid rgba(255, 246, 41, 0.2);
+        border-radius: 32px;
+        padding: 48px;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: 0 25px 80px rgba(59, 32, 114, 0.4);
+        position: relative;
+      }
+
+      .role-modal-content::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 246, 41, 0.5), transparent);
+        border-radius: 32px 32px 0 0;
+      }
+
+      .modal-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .modal-title {
+        font-family: 'Sora', sans-serif;
+        font-size: 34px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+      }
+
+      .modal-subtitle {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.6;
+      }
+
+      .role-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+
+      .role-option {
+        position: relative;
+      }
+
+      .role-option input[type="checkbox"] {
+        display: none;
+      }
+
+      .role-option label {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 20px;
+        border: 2px solid rgba(107, 71, 200, 0.3);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(107, 71, 200, 0.05);
+      }
+
+      .role-option input[type="checkbox"]:checked + label {
+        border-color: var(--yellow);
+        background: rgba(255, 246, 41, 0.12);
+        box-shadow: 0 0 24px rgba(255, 246, 41, 0.2);
+      }
+
+      .role-option label:hover {
+        border-color: rgba(255, 246, 41, 0.4);
+        background: rgba(107, 71, 200, 0.1);
+      }
+
+      .checkbox-custom {
+        width: 22px;
+        height: 22px;
+        border: 2px solid rgba(255, 246, 41, 0.4);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .role-option input[type="checkbox"]:checked + label .checkbox-custom {
+        background: var(--yellow);
+        border-color: var(--yellow);
+      }
+
+      .role-option input[type="checkbox"]:checked + label .checkbox-custom::after {
+        content: '✓';
+        color: #1A0E3A;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .role-label-content {
+        flex: 1;
+      }
+
+      .role-name {
+        font-family: 'Sora', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
+      }
+
+      .role-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.5;
+      }
+
+      .nyc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255, 246, 41, 0.15);
+        border: 0.5px solid rgba(255, 246, 41, 0.4);
+        border-radius: 100px;
+        padding: 2px 8px;
+        font-size: 10px;
+        color: var(--yellow);
+        margin-top: 4px;
+        font-weight: 600;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn-modal {
+        flex: 1;
+        padding: 14px 24px;
+        border: none;
+        border-radius: 100px;
+        font-family: 'Sora', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
+      }
+
+      .btn-submit {
+        background: var(--yellow);
+        color: #1A0E3A;
+      }
+
+      .btn-submit:hover:not(:disabled) {
+        background: #FFF84D;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(255, 246, 41, 0.3);
+      }
+
+      .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-cancel {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .error-msg {
+        color: #FF6B6B;
+        font-size: 13px;
+        margin-top: 10px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .error-msg.show {
+        opacity: 1;
+      }
+
+      /* MODERN INPUTS */
+      .modern-input-group {
+        position: relative;
+        width: 100%;
+      }
+      .modern-input {
+        width: 100%;
+        padding: 18px 24px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1.5px solid rgba(255, 246, 41, 0.2);
+        border-radius: 16px;
+        color: white;
+        font-family: 'Sora', sans-serif;
+        font-size: 15px;
+        box-sizing: border-box;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+      }
+      .modern-input::placeholder {
+        color: transparent; /* hide placeholder for floating label */
+      }
+      .modern-label {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.5);
+        font-family: 'Sora', sans-serif;
+        font-size: 15px;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: transparent;
+        padding: 0 4px;
+      }
+      .modern-input:focus, .modern-input:not(:placeholder-shown) {
+        border-color: var(--yellow);
+        background: rgba(107, 71, 200, 0.15);
+        box-shadow: 0 0 0 4px rgba(255, 246, 41, 0.1);
+      }
+      .modern-input:focus + .modern-label, .modern-input:not(:placeholder-shown) + .modern-label {
+        top: 0;
+        font-size: 12px;
+        color: var(--yellow);
+        background: #1A0E3A; /* match modal bg */
+        border-radius: 4px;
+      }
+      
+      /* LOADING SPINNER */
+      .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(26, 14, 58, 0.3);
+        border-radius: 50%;
+        border-top-color: #1A0E3A;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .btn-loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+      .btn-loading .btn-text {
+        display: none;
+      }
+      .btn-loading .spinner {
+        display: inline-block;
+      }
+
+      /* SUCCESS STATE */
+      .success-state {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        animation: slideUp 0.5s ease;
+      }
+      .success-check {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 246, 41, 0.15);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        position: relative;
+      }
+      .success-check::before {
+        content: '';
+        position: absolute;
+        inset: -10px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 246, 41, 0.3);
+        animation: pulse 2s infinite;
+      }
+      .success-check svg {
+        width: 40px;
+        height: 40px;
+        color: var(--yellow);
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        animation-delay: 0.2s;
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      @keyframes popIn {
+        to { opacity: 1; transform: scale(1); }
+      }
+      .success-title {
+        font-family: 'Sora', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+      }
+      .success-desc {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 16px;
+        line-height: 1.6;
+        max-width: 400px;
+      }
+
+      @media (max-width: 640px) {
+        .role-modal-content {
+          padding: 32px 24px;
+        }
+
+        .modal-title {
+          font-size: 26px;
+        }
+
+        .role-options {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .role-option label {
+          padding: 16px;
+        }
+      }
+    </style>
+
+    <div class="role-modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Choose your role</div>
+        <div class="modal-subtitle">Tell us how you'll use Tourifique to get early access and exclusive benefits</div>
+      </div>
+
+      <form id="roleForm" style="display:flex;flex-direction:column;gap:24px;">
+        <div class="role-options">
+          <div class="role-option">
+            <input type="checkbox" id="cb-traveler" name="role" value="traveler"/>
+            <label for="cb-traveler">
+              <div class="checkbox-custom"></div>
+              <div class="role-label-content">
+                <div class="role-name">Traveler</div>
+                <div class="role-desc">Discover & book amazing travel experiences</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option">
+            <input type="checkbox" id="cb-travelpreneur" name="role" value="travelpreneur"/>
+            <label for="cb-travelpreneur">
+              <div class="checkbox-custom"></div>
+              <div class="role-label-content">
+                <div class="role-name">Travelpreneur™</div>
+                <div class="role-desc">Create a store & earn on every booking</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="role-option">
+            <input type="checkbox" id="cb-supplier" name="role" value="supplier"/>
+            <label for="cb-supplier">
+              <div class="checkbox-custom"></div>
+              <div class="role-label-content">
+                <div class="role-name">Supplier</div>
+                <div class="role-desc">List premium travel experiences</div>
+                <div class="nyc-badge">🗽 NYC only</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="error-msg" id="roleError">Please select a role</div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-modal btn-cancel" id="btnCancelRole">Cancel</button>
+          <button type="submit" class="btn-modal btn-submit" id="btnSubmitRole" disabled>Continue</button>
+        </div>
+      </form>
+
+    <!-- WL-BTN TRAVELER FORM -->
+    <div id="wlTravelerForm" style="display:none;flex-direction:column;gap:16px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Traveler!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.4;">Tell us a bit about yourself</div>
+      </div>
+      <form id="wlTravelerFormBody" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="wlTravelerFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="wlTravelerLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="wlTravelerEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="wlTravelerError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <button type="button" class="btn-modal btn-cancel" id="wlBtnBackTraveler" style="flex:1;padding:12px 20px;font-size:14px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="wlBtnSubmitTraveler" style="flex:1;padding:12px 20px;font-size:14px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
     </div>
-    <div style="display:flex;flex-direction:column;gap:10px;justify-content:center;">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size: 17px;color:rgba(255,255,255,0.75);white-space:nowrap;">
-        <input type="checkbox" id="cb-traveler" style="width:15px;height:15px;accent-color:var(--yellow);cursor:pointer;"/>
-        Traveler
-      </label>
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size: 17px;color:rgba(255,255,255,0.75);white-space:nowrap;">
-        <input type="checkbox" id="cb-travelpreneur" style="width:15px;height:15px;accent-color:var(--yellow);cursor:pointer;"/>
-        Travelpreneur&#8482;
-      </label>
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size: 17px;color:rgba(255,255,255,0.75);white-space:nowrap;">
-        <input type="checkbox" id="cb-supplier" style="width:15px;height:15px;accent-color:var(--yellow);cursor:pointer;"/>
-        Supplier <span style="font-size:11px;background:rgba(255, 246, 41,0.15);border:0.5px solid rgba(255, 246, 41,0.4);border-radius:100px;padding:1px 7px;color:var(--yellow);margin-left:2px;">NYC only</span>
-      </label>
+
+    <!-- WL-BTN SUPPLIER FORM -->
+    <div id="wlSupplierForm" style="display:none;flex-direction:column;gap:16px;">
+      <div class="modal-header" style="text-align:center;margin-bottom:12px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:28px;font-weight:700;color:white;margin-bottom:8px;letter-spacing:-0.5px;">Welcome, Supplier!</div>
+        <div class="modal-subtitle" style="font-size:14px;color:rgba(255, 255, 255, 0.65);line-height:1.4;">Let's get your business set up</div>
+      </div>
+      <form id="wlSupplierFormBody" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="modern-input-group">
+          <input type="text" placeholder="First Name" id="wlSupplierFirstName" class="modern-input" />
+          <label class="modern-label">First Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Last Name" id="wlSupplierLastName" class="modern-input" />
+          <label class="modern-label">Last Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="text" placeholder="Company Name" id="wlSupplierCompanyName" class="modern-input" />
+          <label class="modern-label">Company Name</label>
+        </div>
+        <div class="modern-input-group">
+          <input type="email" placeholder="Email" id="wlSupplierEmail" class="modern-input" />
+          <label class="modern-label">Email Address</label>
+        </div>
+        <div id="wlSupplierError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <button type="button" class="btn-modal btn-cancel" id="wlBtnBackSupplier" style="flex:1;padding:12px 20px;font-size:14px;">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="wlBtnSubmitSupplier" style="flex:1;padding:12px 20px;font-size:14px;display:flex;align-items:center;justify-content:center;">
+            <span class="btn-text">Submit</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- WL-BTN TRAVELPRENEUR FORM -->
+    <div id="wlTravelpreneurForm" style="display:none;flex-direction:column;gap:14px;max-height:85vh;overflow-y:auto;">
+      <div class="modal-header" style="text-align:center;margin-bottom:10px;">
+        <div class="modal-title" style="font-family:'Sora', sans-serif;font-size:26px;font-weight:700;color:white;margin-bottom:6px;letter-spacing:-0.5px;">Welcome, Travelpreneur™!</div>
+        <div class="modal-subtitle" style="font-size:13px;color:rgba(255, 255, 255, 0.65);line-height:1.3;">Build your travel store</div>
+      </div>
+      <form id="wlTravelpreneurFormBody" style="display:flex;flex-direction:column;gap:10px;">
+        <input type="text" placeholder="First Name" id="wlTravelpreneurFirstName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="text" placeholder="Last Name" id="wlTravelpreneurLastName" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <input type="email" placeholder="Email" id="wlTravelpreneurEmail" style="padding:11px 16px;border:1.5px solid rgba(255, 246, 41, 0.3);border-radius:100px;background:rgba(107, 71, 200, 0.1);color:white;font-family:'Sora', sans-serif;font-size:13px;width:100%;box-sizing:border-box;transition:all 0.3s ease;" />
+        <div style="margin-top:10px;padding:12px;background:rgba(107, 71, 200, 0.15);border-radius:12px;border:1.5px solid rgba(255, 246, 41, 0.2);">
+          <div style="font-family:'Sora', sans-serif;font-size:11px;font-weight:600;color:rgba(255, 246, 41, 0.9);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.3px;">Social Media</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:8px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #25F4EE 0%, #FF0050 100%);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:700;color:white;flex-shrink:0;box-shadow:0 2px 6px rgba(37, 244, 238, 0.2);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.4 2.4 0 1 1-4.77-2.3A2.4 2.4 0 0 1 9.1 13.46V9.4a6.11 6.11 0 0 0-8.87 6.06A6.11 6.11 0 0 0 9.1 21.46a6 6 0 0 0 6.1-5.9v-3.14a7.88 7.88 0 0 0 4.79 1.8v-3.64a5.07 5.07 0 0 1-.6-.05z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:10px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_tiktok_handle" id="wlTiktokHandle" class="social-input" data-platform="tiktok" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="wl-tiktok-warning" style="font-size:11px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:20px;white-space:nowrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:8px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:linear-gradient(135deg, #FE7957 0%, #B80E7F 50%, #7C1EA8 100%);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 6px rgba(254, 121, 87, 0.2);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="white" stroke-width="2"/><circle cx="18.5" cy="5.5" r="1.5" fill="white"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:10px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_instagram_handle" id="wlInstagramHandle" class="social-input" data-platform="instagram" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="wl-instagram-warning" style="font-size:11px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:20px;white-space:nowrap;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255, 255, 255, 0.08);border-radius:12px;transition:all 0.3s ease;border:1px solid rgba(0, 0, 0, 0.2);">
+              <div style="width:26px;height:26px;background:#FFFC00;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255, 252, 0, 0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1A0E3A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5zm5 0s-1.5-2-1.5-3.5c0-1 .67-2 2-2s2 1 2 2-1.5 3.5-2.5 3.5z"/></svg>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                <span style="color:rgba(255, 255, 255, 0.6);font-size:11px;font-weight:600;">@</span>
+                <input type="text" placeholder="your_snapchat_handle" id="wlSnapchatHandle" class="social-input" data-platform="snapchat" style="flex:1;background:transparent;border:none;color:white;font-size:10px;outline:none;font-family:'Sora', sans-serif;" />
+              </div>
+              <div id="wl-snapchat-warning" style="font-size:11px;color:#FFB366;opacity:0;transition:opacity 0.3s ease;position:absolute;right:20px;white-space:nowrap;"></div>
+            </div>
+          </div>
+        </div>
+        <div id="wlTravelpreneurError" style="color:#FF6B6B;font-size:12px;opacity:0;transition:opacity 0.3s ease;height:16px;">Please fill in all fields</div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button type="button" class="btn-modal btn-cancel" id="wlBtnBackTravelpreneur" style="flex:1;padding:11px 18px;border:1px solid rgba(255, 255, 255, 0.2);border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:rgba(255, 255, 255, 0.1);color:rgba(255, 255, 255, 0.75);">Back</button>
+          <button type="button" class="btn-modal btn-submit" id="wlBtnSubmitTravelpreneur" style="flex:1;padding:11px 18px;border:none;border-radius:100px;font-family:'Sora', sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s ease;background:var(--yellow);color:#1A0E3A;">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
   <div class="app-badges">
     <div class="app-badge">
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M15.5 11.5c0-2.5 1.8-3.7 1.9-3.8-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.7-.8-2.8-.8-1.5 0-2.8.9-3.6 2.2-1.5 2.6-.4 6.5 1.1 8.7.7 1 1.6 2.2 2.8 2.1 1.1-.1 1.5-.7 2.8-.7 1.3 0 1.7.7 2.9.7 1.2 0 2-1 2.8-2.1.9-1.2 1.2-2.4 1.2-2.5-.1 0-2.5-1-2.5-3.9z" fill="white" opacity="0.8"/><path d="M13.2 5c.6-.7 1-1.7.9-2.7-1 0-2.1.7-2.8 1.4-.6.7-.9 1.7-.8 2.6 1 .1 2.1-.5 2.7-1.3z" fill="white" opacity="0.8"/></svg>
@@ -1027,12 +1980,6 @@
     <li><a href="#">Careers</a></li>
   </ul>
   <div class="footer-social" aria-label="Social media links">
-    <a class="social-icon" href="https://www.youtube.com/@tourifique" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener noreferrer">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M23.5 7.2C23.2 6 22.2 5 21 4.7C18.9 4.1 12 4.1 12 4.1C12 4.1 5.1 4.1 3 4.7C1.8 5 0.8 6 0.5 7.2C0 9.4 0 12 0 12C0 12 0 14.6 0.5 16.8C0.8 18 1.8 19 3 19.3C5.1 19.9 12 19.9 12 19.9C12 19.9 18.9 19.9 21 19.3C22.2 19 23.2 18 23.5 16.8C24 14.6 24 12 24 12C24 12 24 9.4 23.5 7.2Z" fill="#FF0000"/>
-        <path d="M9.75 15.5V8.5L16 12L9.75 15.5Z" fill="#FFFFFF"/>
-      </svg>
-    </a>
     <a class="social-icon" href="https://www.tiktok.com/@tourifique" aria-label="TikTok" title="TikTok" target="_blank" rel="noopener noreferrer">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M14.9 2.4C15.6 4.3 17.1 5.8 19 6.4V9.3C17.5 9.3 16.1 8.9 14.9 8.1V14.2C14.9 17.6 12.1 20.4 8.7 20.4C5.3 20.4 2.5 17.6 2.5 14.2C2.5 10.8 5.3 8 8.7 8C9.2 8 9.7 8.1 10.1 8.2V11.2C9.7 11.1 9.2 11 8.7 11C7 11 5.6 12.4 5.6 14.2C5.6 15.9 7 17.3 8.7 17.3C10.4 17.3 11.8 15.9 11.8 14.2V2.4H14.9Z" fill="#FFFFFF"/>
@@ -1061,6 +2008,12 @@
         <path d="M7 9.5H4.5V19H7V9.5ZM5.8 8.4C6.6 8.4 7.2 7.8 7.2 7C7.2 6.2 6.6 5.6 5.8 5.6C5 5.6 4.4 6.2 4.4 7C4.4 7.8 5 8.4 5.8 8.4ZM19.5 13.6C19.5 10.9 18.1 9.3 15.8 9.3C14.7 9.3 13.8 9.8 13.3 10.5V9.5H11V19H13.5V14.3C13.5 13.1 14.2 12.3 15.2 12.3C16.2 12.3 16.9 13.1 16.9 14.3V19H19.5V13.6Z" fill="#FFFFFF"/>
       </svg>
     </a>
+    <a class="social-icon" href="https://www.youtube.com/@tourifique" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.5 7.2C23.2 6 22.2 5 21 4.7C18.9 4.1 12 4.1 12 4.1C12 4.1 5.1 4.1 3 4.7C1.8 5 0.8 6 0.5 7.2C0 9.4 0 12 0 12C0 12 0 14.6 0.5 16.8C0.8 18 1.8 19 3 19.3C5.1 19.9 12 19.9 12 19.9C12 19.9 18.9 19.9 21 19.3C22.2 19 23.2 18 23.5 16.8C24 14.6 24 12 24 12C24 12 24 9.4 23.5 7.2Z" fill="#FF0000"/>
+        <path d="M9.75 15.5V8.5L16 12L9.75 15.5Z" fill="#FFFFFF"/>
+      </svg>
+    </a>
   </div>
   <div class="footer-copy">© 2026 Tourifique. All rights reserved.</div>
 </footer>
@@ -1077,17 +2030,818 @@
     });
   });
 
+  // ROLE MODAL LOGIC
+  const roleModal = document.getElementById('roleModal');
+  // BODY SECTION HANDLERS
+  const roleForm = document.getElementById('roleForm');
+  const btnSubmitRole = document.getElementById('btnSubmitRole');
+  const btnCancelRole = document.getElementById('btnCancelRole');
+  const roleCheckboxes = document.querySelectorAll('#roleForm input[type="checkbox"]');
+  const roleError = document.getElementById('roleError');
+  const wlBtn = document.getElementById('wl-btn');
 
-  document.getElementById('wl-btn').addEventListener('click', () => {
-    const email = document.getElementById('wl-email').value;
-    if (email && email.includes('@')) {
-      const btn = document.getElementById('wl-btn');
-      btn.textContent = "You're in!";
-      btn.style.background = '#3B2072';
-      btn.style.color = 'white';
-      document.getElementById('wl-email').value = '';
+  // NAVBAR SECTION HANDLERS
+  const navWlBtn = document.getElementById('navWlBtn');
+  const navbarWlModal = document.getElementById('navbarWlModal');
+  const navWlEmailStep = document.getElementById('navWlEmailStep');
+  const navWlRoleStep = document.getElementById('navWlRoleStep');
+  const navWlEmail = document.getElementById('navWlEmail');
+  const navEmailError = document.getElementById('navEmailError');
+  const navWlSubmitEmail = document.getElementById('navWlSubmitEmail');
+  const navWlCancel = document.getElementById('navWlCancel');
+  const navRoleForm = document.getElementById('navRoleForm');
+  const navBtnSubmitRole = document.getElementById('navBtnSubmitRole');
+  const navBtnCancelRole = document.getElementById('navBtnCancelRole');
+  const navRoleCheckboxes = document.querySelectorAll('#navRoleForm input[type="checkbox"]');
+  const navRoleError = document.getElementById('navRoleError');
+
+  // HERO SECTION HANDLERS
+  const heroWlBtn = document.getElementById('heroWlBtn');
+  const heroWlModal = document.getElementById('heroWlModal');
+  const heroWlEmailStep = document.getElementById('heroWlEmailStep');
+  const heroWlRoleStep = document.getElementById('heroWlRoleStep');
+  const heroWlEmail = document.getElementById('heroWlEmail');
+  const heroEmailError = document.getElementById('heroEmailError');
+  const heroWlSubmitEmail = document.getElementById('heroWlSubmitEmail');
+  const heroWlCancel = document.getElementById('heroWlCancel');
+  const heroRoleForm = document.getElementById('heroRoleForm');
+  const heroBtnSubmitRole = document.getElementById('heroBtnSubmitRole');
+  const heroBtnCancelRole = document.getElementById('heroBtnCancelRole');
+  const heroRoleCheckboxes = document.querySelectorAll('#heroRoleForm input[type="checkbox"]');
+  const heroRoleError = document.getElementById('heroRoleError');
+
+  // Show modal when Join waitlist is clicked (footer button)
+  wlBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    roleModal.style.display = 'flex';
+    document.getElementById('roleForm').style.display = 'flex';
+    document.getElementById('wlTravelerForm').style.display = 'none';
+    document.getElementById('wlSupplierForm').style.display = 'none';
+    document.getElementById('wlTravelpreneurForm').style.display = 'none';
+    roleCheckboxes.forEach(cb => cb.checked = false);
+    btnSubmitRole.disabled = true;
+  });
+
+
+
+  // Enable/disable submit button based on checkbox selection (single-select pattern)
+  roleCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        // Uncheck all other checkboxes for single-select behavior
+        roleCheckboxes.forEach(cb => {
+          if (cb !== checkbox) cb.checked = false;
+        });
+      }
+      const hasSelection = Array.from(roleCheckboxes).some(cb => cb.checked);
+      btnSubmitRole.disabled = !hasSelection;
+      if (hasSelection) {
+        roleError.classList.remove('show');
+      }
+    });
+  });
+
+  // Cancel button
+  btnCancelRole.addEventListener('click', () => {
+    roleModal.style.display = 'none';
+    document.getElementById('roleForm').style.display = 'flex';
+    document.getElementById('wlTravelerForm').style.display = 'none';
+    document.getElementById('wlSupplierForm').style.display = 'none';
+    document.getElementById('wlTravelpreneurForm').style.display = 'none';
+    roleCheckboxes.forEach(cb => cb.checked = false);
+    btnSubmitRole.disabled = true;
+    roleError.classList.remove('show');
+  });
+
+  // Close modal when clicking outside
+  roleModal.addEventListener('click', (e) => {
+    if (e.target === roleModal) {
+      btnCancelRole.click();
     }
   });
+
+  // Submit role selection and proceed to role-specific forms (footer wl-btn)
+  roleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const selectedCheckbox = Array.from(roleCheckboxes).find(cb => cb.checked);
+    if (!selectedCheckbox) {
+      roleError.classList.add('show');
+      return;
+    }
+
+    const selectedRole = selectedCheckbox.value;
+    roleError.classList.remove('show');
+    
+    // Hide role selection form and show role-specific form
+    document.getElementById('roleForm').style.display = 'none';
+    
+    if (selectedRole === 'traveler') {
+      document.getElementById('wlTravelerForm').style.display = 'flex';
+      document.getElementById('wlTravelerFirstName').focus();
+    } else if (selectedRole === 'supplier') {
+      document.getElementById('wlSupplierForm').style.display = 'flex';
+      document.getElementById('wlSupplierFirstName').focus();
+    } else if (selectedRole === 'travelpreneur') {
+      document.getElementById('wlTravelpreneurForm').style.display = 'flex';
+      document.getElementById('wlTravelpreneurFirstName').focus();
+    }
+  });
+
+  // ===== NAVBAR WAITLIST MODAL HANDLERS - MULTI-STEP ROLE-BASED FORM =====
+
+  // Get Form DOM Elements
+  const navWlTravelerForm = document.getElementById('navWlTravelerForm');
+  const navWlSupplierForm = document.getElementById('navWlSupplierForm');
+  const navWlTravelpreneurForm = document.getElementById('navWlTravelpreneurForm');
+
+  // Show navbar modal when navbar Join waitlist is clicked
+  navWlBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    navbarWlModal.style.display = 'flex';
+    navWlRoleStep.style.display = 'flex';
+    navWlTravelerForm.style.display = 'none';
+    navWlSupplierForm.style.display = 'none';
+    navWlTravelpreneurForm.style.display = 'none';
+    navRoleCheckboxes.forEach(cb => cb.checked = false);
+    navBtnSubmitRole.disabled = true;
+  });
+
+  // Close navbar modal
+  const closeNavWlModal = () => {
+    navbarWlModal.style.display = 'none';
+    navWlRoleStep.style.display = 'flex';
+    navWlTravelerForm.style.display = 'none';
+    navWlSupplierForm.style.display = 'none';
+    navWlTravelpreneurForm.style.display = 'none';
+    navRoleCheckboxes.forEach(cb => cb.checked = false);
+    navBtnSubmitRole.disabled = true;
+  };
+
+  // Close modal when clicking outside
+  navbarWlModal.addEventListener('click', (e) => {
+    if (e.target === navbarWlModal) {
+      closeNavWlModal();
+    }
+  });
+
+  // Enable/disable submit button based on checkbox selection
+  navRoleCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        navRoleCheckboxes.forEach(cb => {
+          if (cb !== checkbox) cb.checked = false;
+        });
+      }
+      const hasSelection = Array.from(navRoleCheckboxes).some(cb => cb.checked);
+      navBtnSubmitRole.disabled = !hasSelection;
+      if (hasSelection) {
+        navRoleError.style.opacity = '0';
+      }
+    });
+  });
+
+  // Cancel role selection button
+  document.getElementById('navBtnCancelRole').addEventListener('click', () => {
+    closeNavWlModal();
+  });
+
+  // Submit navbar role selection and show role-specific form
+  navRoleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const selectedCheckbox = Array.from(navRoleCheckboxes).find(cb => cb.checked);
+    if (!selectedCheckbox) {
+      navRoleError.style.opacity = '1';
+      return;
+    }
+
+    const selectedRole = selectedCheckbox.value;
+    navRoleError.style.opacity = '0';
+    navWlRoleStep.style.display = 'none';
+    
+    // Show role-specific form
+    if (selectedRole === 'traveler') {
+      navWlTravelerForm.style.display = 'flex';
+      document.getElementById('travelerFirstName').focus();
+    } else if (selectedRole === 'supplier') {
+      navWlSupplierForm.style.display = 'flex';
+      document.getElementById('supplierFirstName').focus();
+    } else if (selectedRole === 'travelpreneur') {
+      navWlTravelpreneurForm.style.display = 'flex';
+      document.getElementById('travelpreneurFirstName').focus();
+    }
+  });
+
+  // ===== TRAVELER FORM HANDLERS =====
+  const travelerFirstName = document.getElementById('travelerFirstName');
+  const travelerLastName = document.getElementById('travelerLastName');
+  const travelerEmail = document.getElementById('travelerEmail');
+  const travelerError = document.getElementById('travelerError');
+
+  document.getElementById('navBtnBackTraveler').addEventListener('click', () => {
+    navWlTravelerForm.style.display = 'none';
+    navWlRoleStep.style.display = 'flex';
+    travelerFirstName.value = '';
+    travelerLastName.value = '';
+    travelerEmail.value = '';
+    travelerError.style.opacity = '0';
+    navRoleCheckboxes.forEach(cb => cb.checked = false);
+  });
+
+  document.getElementById('navBtnSubmitTraveler').addEventListener('click', () => {
+    const firstName = travelerFirstName.value.trim();
+    const lastName = travelerLastName.value.trim();
+    const email = travelerEmail.value.trim();
+
+    if (!firstName || !lastName || !email || !email.includes('@')) {
+      travelerError.style.opacity = '1';
+      return;
+    }
+
+    travelerError.style.opacity = '0';
+    
+    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
+    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+    if (!submittedEmails.includes(email.toLowerCase())) {
+      submittedEmails.push(email.toLowerCase());
+      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+    }
+    
+    const travelerData = { firstName, lastName, email, formType: 'traveler_signup', submittedAt: new Date().toLocaleString() };
+    console.log('📊 Traveler signup:', travelerData);
+    
+    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
+    showCongratulationsModal();
+    
+    // Send data in background
+    sendToGoogleAppsScript(travelerData);
+    
+    navWlBtn.textContent = "You're in!";
+    navWlBtn.style.background = '#3B2072';
+    navWlBtn.style.color = 'white';
+    navWlBtn.disabled = true;
+    navbarWlModal.style.display = 'none';
+  });
+
+  // ===== SUPPLIER FORM HANDLERS =====
+  const supplierFirstName = document.getElementById('supplierFirstName');
+  const supplierLastName = document.getElementById('supplierLastName');
+  const supplierCompanyName = document.getElementById('supplierCompanyName');
+  const supplierEmail = document.getElementById('supplierEmail');
+  const supplierError = document.getElementById('supplierError');
+
+  document.getElementById('navBtnBackSupplier').addEventListener('click', () => {
+    navWlSupplierForm.style.display = 'none';
+    navWlRoleStep.style.display = 'flex';
+    supplierFirstName.value = '';
+    supplierLastName.value = '';
+    supplierCompanyName.value = '';
+    supplierEmail.value = '';
+    supplierError.style.opacity = '0';
+    navRoleCheckboxes.forEach(cb => cb.checked = false);
+  });
+
+  document.getElementById('navBtnSubmitSupplier').addEventListener('click', () => {
+    const firstName = supplierFirstName.value.trim();
+    const lastName = supplierLastName.value.trim();
+    const companyName = supplierCompanyName.value.trim();
+    const email = supplierEmail.value.trim();
+
+    if (!firstName || !lastName || !companyName || !email || !email.includes('@')) {
+      supplierError.style.opacity = '1';
+      return;
+    }
+
+    supplierError.style.opacity = '0';
+    
+    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
+    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+    if (!submittedEmails.includes(email.toLowerCase())) {
+      submittedEmails.push(email.toLowerCase());
+      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+    }
+    
+    const supplierData = { firstName, lastName, companyName, email, formType: 'supplier_signup', submittedAt: new Date().toLocaleString() };
+    console.log('📊 Supplier signup:', supplierData);
+    
+    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
+    showCongratulationsModal();
+    
+    // Send data in background
+    sendToGoogleAppsScript(supplierData);
+    
+    navWlBtn.textContent = "You're in!";
+    navWlBtn.style.background = '#3B2072';
+    navWlBtn.style.color = 'white';
+    navWlBtn.disabled = true;
+    navbarWlModal.style.display = 'none';
+  });
+
+  // ===== TRAVELPRENEUR FORM HANDLERS =====
+  const travelpreneurFirstName = document.getElementById('travelpreneurFirstName');
+  const travelpreneurLastName = document.getElementById('travelpreneurLastName');
+  const travelpreneurEmail = document.getElementById('travelpreneurEmail');
+  const tiktokHandle = document.getElementById('tiktokHandle');
+  const instagramHandle = document.getElementById('instagramHandle');
+  const snapchatHandle = document.getElementById('snapchatHandle');
+  const travelpreneurError = document.getElementById('travelpreneurError');
+
+  document.getElementById('navBtnBackTravelpreneur').addEventListener('click', () => {
+    navWlTravelpreneurForm.style.display = 'none';
+    navWlRoleStep.style.display = 'flex';
+    travelpreneurFirstName.value = '';
+    travelpreneurLastName.value = '';
+    travelpreneurEmail.value = '';
+    tiktokHandle.value = '';
+    instagramHandle.value = '';
+    snapchatHandle.value = '';
+    travelpreneurError.style.opacity = '0';
+    navRoleCheckboxes.forEach(cb => cb.checked = false);
+  });
+
+  document.getElementById('navBtnSubmitTravelpreneur').addEventListener('click', () => {
+    const firstName = travelpreneurFirstName.value.trim();
+    const lastName = travelpreneurLastName.value.trim();
+    const email = travelpreneurEmail.value.trim();
+    const tiktok = tiktokHandle.value.trim();
+    const instagram = instagramHandle.value.trim();
+    const snapchat = snapchatHandle.value.trim();
+
+    if (!firstName || !lastName || !email || !email.includes('@')) {
+      travelpreneurError.style.opacity = '1';
+      return;
+    }
+
+    travelpreneurError.style.opacity = '0';
+    
+    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
+    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+    if (!submittedEmails.includes(email.toLowerCase())) {
+      submittedEmails.push(email.toLowerCase());
+      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+    }
+    
+    const travelpreneurData = { firstName, lastName, email, tiktok, instagram, snapchat, formType: 'travelpreneur_signup', submittedAt: new Date().toLocaleString() };
+    console.log('📊 Travelpreneur signup:', travelpreneurData);
+    
+    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
+    showCongratulationsModal();
+    
+    // Send data in background
+    sendToGoogleAppsScript(travelpreneurData);
+    
+    navWlBtn.textContent = "You're in!";
+    navWlBtn.style.background = '#3B2072';
+    navWlBtn.style.color = 'white';
+    navWlBtn.disabled = true;
+    navbarWlModal.style.display = 'none';
+  });
+
+  // ===== SOCIAL MEDIA @ VALIDATION =====
+  const socialInputs = document.querySelectorAll('.social-input');
+  
+  socialInputs.forEach(input => {
+    input.addEventListener('input', function() {
+      const platform = this.getAttribute('data-platform');
+      const warningElement = document.getElementById(platform + '-warning');
+      const value = this.value;
+      
+      if (value.includes('@')) {
+        // Show warning
+        warningElement.textContent = '⚠ Remove the @';
+        warningElement.style.opacity = '1';
+        
+        // Remove @ character from input
+        this.value = value.replace(/@/g, '');
+      } else {
+        // Hide warning
+        warningElement.style.opacity = '0';
+      }
+    });
+  });
+
+  // ===== HERO WAITLIST MODAL HANDLERS =====
+
+  // Show hero modal when hero Join waitlist is clicked
+  heroWlBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    heroWlModal.style.display = 'flex';
+    heroWlRoleStep.style.display = 'flex';
+    heroRoleCheckboxes.forEach(cb => cb.checked = false);
+  });
+
+
+
+  // Back button in role step
+  heroBtnCancelRole.addEventListener('click', () => {
+    heroWlModal.style.display = 'none';
+    heroWlRoleStep.style.display = 'flex';
+    heroRoleCheckboxes.forEach(cb => cb.checked = false);
+    heroBtnSubmitRole.disabled = true;
+    heroRoleError.style.opacity = '0';
+  });
+
+  // Close hero modal
+  heroWlCancel.addEventListener('click', () => {
+    heroWlModal.style.display = 'none';
+    heroWlRoleStep.style.display = 'flex';
+    heroRoleCheckboxes.forEach(cb => cb.checked = false);
+  });
+
+  // Close modal when clicking outside
+  heroWlModal.addEventListener('click', (e) => {
+    if (e.target === heroWlModal) {
+      heroWlCancel.click();
+    }
+  });
+
+  // Enable/disable submit button based on checkbox selection
+  heroRoleCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        // Uncheck all other checkboxes for single-select behavior
+        heroRoleCheckboxes.forEach(cb => {
+          if (cb !== checkbox) cb.checked = false;
+        });
+      }
+      const hasSelection = Array.from(heroRoleCheckboxes).some(cb => cb.checked);
+      heroBtnSubmitRole.disabled = !hasSelection;
+      if (hasSelection) {
+        heroRoleError.style.opacity = '0';
+      }
+    });
+  });
+
+  // Submit hero role selection and show role-specific form
+  // Hero role form - show email step when role is submitted
+  heroRoleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const selectedCheckbox = Array.from(heroRoleCheckboxes).find(cb => cb.checked);
+    if (!selectedCheckbox) {
+      heroRoleError.style.opacity = '1';
+      return;
+    }
+
+    const selectedRole = selectedCheckbox.value;
+    heroRoleError.style.opacity = '0';
+    heroWlRoleStep.style.display = 'none';
+    
+    // Show role-specific form
+    if (selectedRole === 'traveler') {
+      document.getElementById('heroWlTravelerForm').style.display = 'flex';
+      document.getElementById('heroTravelerFirstName').focus();
+    } else if (selectedRole === 'supplier') {
+      document.getElementById('heroWlSupplierForm').style.display = 'flex';
+      document.getElementById('heroSupplierFirstName').focus();
+    } else if (selectedRole === 'travelpreneur') {
+      document.getElementById('heroWlTravelpreneurForm').style.display = 'flex';
+      document.getElementById('heroTravelpreneurFirstName').focus();
+    }
+  });
+
+  // ===== GOOGLE APPS SCRIPT INTEGRATION =====
+  // Deployment ID: AKfycby-sI4QOf6bb9kETF_tzsqdwT3qWJKaOxGSjddqQW5-zeGF5D8yEP09VEJusm6INh95
+  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-sI4QOf6bb9kETF_tzsqdwT3qWJKaOxGSjddqQW5-zeGF5D8yEP09VEJusm6INh95/exec';
+
+  function sendToGoogleAppsScript(data) {
+    const payload = {
+      timestamp: new Date().toISOString(),
+      ...data
+    };
+    console.log('📤 Sending to Google Apps Script:', payload);
+    
+    const urlParams = new URLSearchParams();
+    Object.keys(payload).forEach(key => {
+      urlParams.append(key, payload[key]);
+    });
+    
+    return fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: urlParams,
+    })
+    .then(response => {
+      console.log('✅ Request sent successfully');
+      return true;
+    })
+    .catch(error => {
+      console.error('❌ Fetch Error:', error);
+      return false;
+    });
+  }
+
+  // Handle duplicate email - hide congratulations and show warning
+  function handleDuplicateEmail() {
+    console.log('⚠️ Duplicate email detected');
+    let modal = document.getElementById('congratsModal');
+    if (modal) {
+      modal.style.opacity = '0';
+      modal.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        if (modal && modal.parentElement) {
+          modal.remove();
+        }
+        // Delete the element so it can be recreated next time
+        let existing = document.getElementById('congratsModal');
+        if (existing) existing.remove();
+        
+        // Show duplicate warning
+        showToast("Already Registered!", "This email is already on our waitlist.", true);
+      }, 300);
+    }
+  }
+
+  // Modern Congratulations Modal
+  function showCongratulationsModal() {
+    console.log('🎉 showCongratulationsModal called!');
+    // Create Modal Overlay
+    let modal = document.getElementById('congratsModal');
+    if (!modal) {
+      console.log('📦 Creating new modal element');
+      modal = document.createElement('div');
+      modal.id = 'congratsModal';
+      modal.style.cssText = "position: fixed; inset: 0; background: rgba(26, 14, 58, 0.7); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px);";
+      
+      const box = document.createElement('div');
+      box.style.cssText = "background: white; border-radius: 24px; padding: 60px 40px; text-align: center; max-width: 480px; box-shadow: 0 25px 80px rgba(107, 71, 200, 0.3); animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;";
+      
+      const icon = document.createElement('div');
+      icon.style.cssText = "font-size: 80px; margin-bottom: 24px; animation: bounce 0.6s ease-in-out;";
+      icon.innerHTML = "🎉";
+      
+      const title = document.createElement('h2');
+      title.style.cssText = "font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; color: #1A0E3A; margin: 0 0 16px 0; letter-spacing: -0.5px;";
+      title.innerHTML = "Congratulations!";
+      
+      const description = document.createElement('p');
+      description.style.cssText = "font-size: 16px; color: #4A3070; margin: 0 0 40px 0; line-height: 1.6;";
+      description.innerHTML = "You have successfully joined our waitlist. We'll be in touch soon with exclusive updates and opportunities!";
+      
+      const button = document.createElement('button');
+      button.style.cssText = "background: linear-gradient(135deg, #6B47C8 0%, #7B5EA7 100%); color: white; border: none; border-radius: 100px; padding: 16px 40px; font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 24px rgba(107, 71, 200, 0.3); transition: all 0.3s ease;";
+      button.innerHTML = "Return to Home";
+      button.onclick = () => {
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          modal.remove();
+          // Reset all forms
+          if (wlEmail) wlEmail.value = '';
+          if (heroWlEmail) heroWlEmail.value = '';
+          document.querySelectorAll('input[type="email"]').forEach(el => el.value = '');
+          document.querySelectorAll('input[type="text"]').forEach(el => el.value = '');
+          document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 300);
+      };
+      
+      button.onmouseover = () => {
+        button.style.transform = 'translateY(-2px)';
+        button.style.boxShadow = '0 12px 32px rgba(107, 71, 200, 0.4)';
+      };
+      button.onmouseout = () => {
+        button.style.transform = 'translateY(0)';
+        button.style.boxShadow = '0 8px 24px rgba(107, 71, 200, 0.3)';
+      };
+      
+      box.appendChild(icon);
+      box.appendChild(title);
+      box.appendChild(description);
+      box.appendChild(button);
+      modal.appendChild(box);
+      document.body.appendChild(modal);
+    }
+
+    modal.style.cssText = "position: fixed; inset: 0; background: rgba(26, 14, 58, 0.7); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(4px); opacity: 1; transform: scale(1); transition: all 0.3s ease;";
+    
+    // AUTO-CLOSE AFTER 5 SECONDS
+    setTimeout(() => {
+      modal.style.opacity = '0';
+      modal.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        if (modal && modal.parentElement) {
+          modal.remove();
+        }
+        // Reset the modal so it can be shown again
+        let existingModal = document.getElementById('congratsModal');
+        if (existingModal) existingModal.remove();
+        // Reset all forms
+        if (wlEmail) wlEmail.value = '';
+        if (heroWlEmail) heroWlEmail.value = '';
+        document.querySelectorAll('input[type="email"]').forEach(el => el.value = '');
+        document.querySelectorAll('input[type="text"]').forEach(el => el.value = '');
+        document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 300);
+    }, 5000);
+  }
+
+  // Updated form handlers with direct Google Apps Script integration
+  
+  // MAIN WAITLIST FORM - Bottom of page
+  const originalWlBtnClick = wlBtn.onclick;
+  // HERO WAITLIST FORM - TRAVELER
+  if (document.getElementById('wlTravelerForm')) {
+    document.getElementById('wlBtnSubmitTraveler').addEventListener('click', () => {
+      const firstName = document.getElementById('wlTravelerFirstName')?.value.trim() || '';
+      const lastName = document.getElementById('wlTravelerLastName')?.value.trim() || '';
+      const email = document.getElementById('wlTravelerEmail')?.value.trim() || '';
+      
+      if (firstName && lastName && email) {
+        // SAVE EMAIL TO LOCALSTORAGE
+        const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+        if (!submittedEmails.includes(email.toLowerCase())) {
+          submittedEmails.push(email.toLowerCase());
+          localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+        }
+        
+        const data = {
+          formType: 'footer_traveler_signup',
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          submittedAt: new Date().toLocaleString()
+        };
+        showCongratulationsModal();
+        sendToGoogleAppsScript(data);
+        wlBtn.textContent = "You're in!";
+        wlBtn.style.background = '#3B2072';
+        wlBtn.style.color = 'white';
+        wlBtn.disabled = true;
+        roleModal.style.display = 'none';
+      } else {
+        document.getElementById('wlTravelerError').style.opacity = '1';
+      }
+    });
+    
+    document.getElementById('wlBtnBackTraveler').addEventListener('click', () => {
+      document.getElementById('wlTravelerForm').style.display = 'none';
+      document.getElementById('roleForm').style.display = 'flex';
+      document.getElementById('wlTravelerFirstName').value = '';
+      document.getElementById('wlTravelerLastName').value = '';
+      document.getElementById('wlTravelerEmail').value = '';
+      document.getElementById('wlTravelerError').style.opacity = '0';
+      roleCheckboxes.forEach(cb => cb.checked = false);
+    });
+  }
+
+  // WL-BTN FOOTER WAITLIST FORM - SUPPLIER
+  if (document.getElementById('wlSupplierForm')) {
+    document.getElementById('wlBtnSubmitSupplier').addEventListener('click', () => {
+      const firstName = document.getElementById('wlSupplierFirstName')?.value.trim() || '';
+      const lastName = document.getElementById('wlSupplierLastName')?.value.trim() || '';
+      const companyName = document.getElementById('wlSupplierCompanyName')?.value.trim() || '';
+      const email = document.getElementById('wlSupplierEmail')?.value.trim() || '';
+      
+      if (firstName && lastName && companyName && email) {
+        // SAVE EMAIL TO LOCALSTORAGE
+        const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+        if (!submittedEmails.includes(email.toLowerCase())) {
+          submittedEmails.push(email.toLowerCase());
+          localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+        }
+        
+        const data = {
+          formType: 'footer_supplier_signup',
+          firstName: firstName,
+          lastName: lastName,
+          companyName: companyName,
+          email: email,
+          submittedAt: new Date().toLocaleString()
+        };
+        showCongratulationsModal();
+        sendToGoogleAppsScript(data);
+        wlBtn.textContent = "You're in!";
+        wlBtn.style.background = '#3B2072';
+        wlBtn.style.color = 'white';
+        wlBtn.disabled = true;
+        roleModal.style.display = 'none';
+      } else {
+        document.getElementById('wlSupplierError').style.opacity = '1';
+      }
+    });
+    
+    document.getElementById('wlBtnBackSupplier').addEventListener('click', () => {
+      document.getElementById('wlSupplierForm').style.display = 'none';
+      document.getElementById('roleForm').style.display = 'flex';
+      document.getElementById('wlSupplierFirstName').value = '';
+      document.getElementById('wlSupplierLastName').value = '';
+      document.getElementById('wlSupplierCompanyName').value = '';
+      document.getElementById('wlSupplierEmail').value = '';
+      document.getElementById('wlSupplierError').style.opacity = '0';
+      roleCheckboxes.forEach(cb => cb.checked = false);
+    });
+  }
+
+  // WL-BTN FOOTER WAITLIST FORM - TRAVELPRENEUR
+  if (document.getElementById('wlTravelpreneurForm')) {
+    document.getElementById('wlBtnSubmitTravelpreneur').addEventListener('click', () => {
+      const firstName = document.getElementById('wlTravelpreneurFirstName')?.value.trim() || '';
+      const lastName = document.getElementById('wlTravelpreneurLastName')?.value.trim() || '';
+      const email = document.getElementById('wlTravelpreneurEmail')?.value.trim() || '';
+      const tiktok = document.getElementById('wlTiktokHandle')?.value.trim() || '';
+      const instagram = document.getElementById('wlInstagramHandle')?.value.trim() || '';
+      const snapchat = document.getElementById('wlSnapchatHandle')?.value.trim() || '';
+      
+      if (firstName && lastName && email) {
+        // SAVE EMAIL TO LOCALSTORAGE
+        const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+        if (!submittedEmails.includes(email.toLowerCase())) {
+          submittedEmails.push(email.toLowerCase());
+          localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+        }
+        
+        const data = {
+          formType: 'footer_travelpreneur_signup',
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          tiktok: tiktok,
+          instagram: instagram,
+          snapchat: snapchat,
+          submittedAt: new Date().toLocaleString()
+        };
+        showCongratulationsModal();
+        sendToGoogleAppsScript(data);
+        wlBtn.textContent = "You're in!";
+        wlBtn.style.background = '#3B2072';
+        wlBtn.style.color = 'white';
+        wlBtn.disabled = true;
+        roleModal.style.display = 'none';
+      } else {
+        document.getElementById('wlTravelpreneurError').style.opacity = '1';
+      }
+    });
+    
+    document.getElementById('wlBtnBackTravelpreneur').addEventListener('click', () => {
+      document.getElementById('wlTravelpreneurForm').style.display = 'none';
+      document.getElementById('roleForm').style.display = 'flex';
+      document.getElementById('wlTravelpreneurFirstName').value = '';
+      document.getElementById('wlTravelpreneurLastName').value = '';
+      document.getElementById('wlTravelpreneurEmail').value = '';
+      document.getElementById('wlTiktokHandle').value = '';
+      document.getElementById('wlInstagramHandle').value = '';
+      document.getElementById('wlSnapchatHandle').value = '';
+      document.getElementById('wlTravelpreneurError').style.opacity = '0';
+      roleCheckboxes.forEach(cb => cb.checked = false);
+    });
+  }
+
+  console.log('✓ Google Apps Script integration loaded successfully');
+  console.log('Endpoint:', GOOGLE_APPS_SCRIPT_URL);
+  
+  // Compact Success Message Function
+  function showToast(title, message, isError = false) {
+    let toast = document.getElementById('toastNotification');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toastNotification';
+      toast.style.cssText = "position: fixed; top: 30px; right: 30px; background: white; padding: 12px 18px; border-radius: 8px; box-shadow: 0 4px 16px rgba(107, 71, 200, 0.2); transform: translateX(400px); opacity: 0; transition: all 0.3s ease; z-index: 9999; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; border-left: 4px solid #FFF629;";
+      
+      const icon = document.createElement('span');
+      icon.id = 'toastIcon';
+      icon.style.cssText = "font-size: 18px; line-height: 1;";
+      
+      const text = document.createElement('span');
+      text.id = 'toastText';
+      text.style.cssText = "color: #1A0E3A; margin: 0; font-family: 'Sora', sans-serif;";
+      
+      toast.appendChild(icon);
+      toast.appendChild(text);
+      document.body.appendChild(toast);
+    }
+
+    const toastIcon = document.getElementById('toastIcon');
+    const toastText = document.getElementById('toastText');
+
+    if (isError) {
+      toast.style.borderLeftColor = "#FF5A52";
+      toastIcon.innerHTML = "⚠️";
+    } else {
+      toast.style.borderLeftColor = "#FFF629";
+      toastIcon.innerHTML = "✓";
+    }
+
+    toastText.innerText = title;
+
+    // Show animation
+    toast.style.display = 'flex';
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+      toast.style.opacity = '1';
+    }, 10);
+
+    // Hide after 4 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(400px)';
+      toast.style.opacity = '0';
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 4000);
+  }
 </script>
 </body>
 </html>
