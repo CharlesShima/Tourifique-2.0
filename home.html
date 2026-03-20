@@ -299,9 +299,14 @@
   /* FOOTER */
   footer { background: var(--purple-dark); border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 52px; display: flex; align-items: center; justify-content: space-between; }
   .footer-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 18px; color: white; display: flex; align-items: center; gap: 8px; }
+  .footer-logo img { height: 52px; width: auto; object-fit: contain; display: block; }
   .footer-logo span { color: var(--yellow); }
   .footer-links { display: flex; gap: 28px; list-style: none; }
   .footer-links a { font-size: 17px; color: rgba(255,255,255,0.35); text-decoration: none; }
+  .footer-social { display: flex; align-items: center; gap: 14px; }
+  .social-icon { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s ease; }
+  .social-icon:hover { transform: translateY(-2px); }
+  .social-icon svg { width: 100%; height: 100%; display: block; }
   .footer-copy { font-size: 16px; color: rgba(255,255,255,0.2); }
 </style>
 </head>
@@ -1013,8 +1018,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">
-    <svg width="26" height="26" viewBox="0 0 38 38" fill="none"><ellipse cx="19" cy="19" rx="19" ry="19" fill="#6B47C8"/><ellipse cx="22" cy="16" rx="10" ry="12" fill="#FFF629"/><ellipse cx="16" cy="18" rx="9" ry="11" fill="#7B5EA7"/><circle cx="24" cy="13" r="2.5" fill="#3B2072"/></svg>
-    Tourifi<span>que</span>
+    <img src="TourifiqueLogo(3) (1).png" alt="Tourifique Logo" />
   </div>
   <ul class="footer-links">
     <li><a href="#">Privacy</a></li>
@@ -1022,6 +1026,42 @@
     <li><a href="#">Contact</a></li>
     <li><a href="#">Careers</a></li>
   </ul>
+  <div class="footer-social" aria-label="Social media links">
+    <a class="social-icon" href="https://www.youtube.com/@tourifique" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.5 7.2C23.2 6 22.2 5 21 4.7C18.9 4.1 12 4.1 12 4.1C12 4.1 5.1 4.1 3 4.7C1.8 5 0.8 6 0.5 7.2C0 9.4 0 12 0 12C0 12 0 14.6 0.5 16.8C0.8 18 1.8 19 3 19.3C5.1 19.9 12 19.9 12 19.9C12 19.9 18.9 19.9 21 19.3C22.2 19 23.2 18 23.5 16.8C24 14.6 24 12 24 12C24 12 24 9.4 23.5 7.2Z" fill="#FF0000"/>
+        <path d="M9.75 15.5V8.5L16 12L9.75 15.5Z" fill="#FFFFFF"/>
+      </svg>
+    </a>
+    <a class="social-icon" href="https://www.tiktok.com/@tourifique" aria-label="TikTok" title="TikTok" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.9 2.4C15.6 4.3 17.1 5.8 19 6.4V9.3C17.5 9.3 16.1 8.9 14.9 8.1V14.2C14.9 17.6 12.1 20.4 8.7 20.4C5.3 20.4 2.5 17.6 2.5 14.2C2.5 10.8 5.3 8 8.7 8C9.2 8 9.7 8.1 10.1 8.2V11.2C9.7 11.1 9.2 11 8.7 11C7 11 5.6 12.4 5.6 14.2C5.6 15.9 7 17.3 8.7 17.3C10.4 17.3 11.8 15.9 11.8 14.2V2.4H14.9Z" fill="#FFFFFF"/>
+        <path d="M14.9 2.4C15.6 4.3 17.1 5.8 19 6.4V8.2C17.4 7.8 16 6.9 14.9 5.8V2.4Z" fill="#25F4EE"/>
+        <path d="M11.8 11.1V14.2C11.8 15.9 10.4 17.3 8.7 17.3C8 17.3 7.3 17.1 6.8 16.7C7.4 17.8 8.6 18.5 10 18.5C11.7 18.5 13.1 17.1 13.1 15.4V4.4H14.9V2.4H11.8V11.1Z" fill="#FE2C55"/>
+      </svg>
+    </a>
+    <a class="social-icon" href="https://www.instagram.com/tourifique/" aria-label="Instagram" title="Instagram" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="igGrad" x1="4" y1="20" x2="20" y2="4" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F58529"/>
+            <stop offset="0.4" stop-color="#DD2A7B"/>
+            <stop offset="0.7" stop-color="#8134AF"/>
+            <stop offset="1" stop-color="#515BD4"/>
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGrad)"/>
+        <circle cx="12" cy="12" r="4.5" stroke="#FFFFFF" stroke-width="2"/>
+        <circle cx="17.2" cy="6.8" r="1.2" fill="#FFFFFF"/>
+      </svg>
+    </a>
+    <a class="social-icon" href="https://www.linkedin.com/company/tourifique/" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+        <path d="M7 9.5H4.5V19H7V9.5ZM5.8 8.4C6.6 8.4 7.2 7.8 7.2 7C7.2 6.2 6.6 5.6 5.8 5.6C5 5.6 4.4 6.2 4.4 7C4.4 7.8 5 8.4 5.8 8.4ZM19.5 13.6C19.5 10.9 18.1 9.3 15.8 9.3C14.7 9.3 13.8 9.8 13.3 10.5V9.5H11V19H13.5V14.3C13.5 13.1 14.2 12.3 15.2 12.3C16.2 12.3 16.9 13.1 16.9 14.3V19H19.5V13.6Z" fill="#FFFFFF"/>
+      </svg>
+    </a>
+  </div>
   <div class="footer-copy">© 2026 Tourifique. All rights reserved.</div>
 </footer>
 
