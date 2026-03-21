@@ -260,6 +260,37 @@
   .feature-item { display: flex; align-items: flex-start; gap: 10px; font-size: 18px; color: var(--text-mid); line-height: 1.5; }
   .check-circle { width: 20px; height: 20px; border-radius: 50%; background: var(--purple-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .btn-panel { background: var(--violet); color: white; border: none; border-radius: 100px; padding: 13px 26px; font-family: 'Times New Roman', Times, serif; font-size: 18px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(107,71,200,0.3); }
+  #panel-supplier .btn-panel { display: none ; }
+
+  /* Watch Experiences Button Styling */
+  .watch-experiences-btn {
+    background: var(--violet);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 13px 26px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(107,71,200,0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+  }
+
+  .watch-experiences-btn:hover {
+    background: var(--yellow);
+    color: var(--text-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(255, 246, 41, 0.5);
+  }
+
+  .watch-experiences-btn:active {
+    transform: scale(0.98);
+  }
 
 
   .panel-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -333,6 +364,7 @@
   }
 
   @media (max-width: 600px) {
+    #navWlBtn { display: none ; }
     .hero-headline { font-size: 42px; line-height: 1.1; }
     .hero-sub { font-size: 15px; }
     .section-title { font-size: 38px; line-height: 1.1; }
@@ -400,7 +432,7 @@
       
       <form id="contactForm" action="https://formsubmit.co/support@tourifique.com" method="POST" style="display:flex;flex-direction:column;gap:12px;">
           <!-- Subject & Style Settings -->
-          <input type="hidden" name="_subject" value="New Contact Message from Tourifique Website">
+          <input type="hidden" name="_subject" value="You have a new message! Tourifique">
           <input type="hidden" name="_template" value="box">
         <div class="modern-input-group" style="position:relative;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:8px 16px;transition:all 0.3s ease;">
           <input type="text" name="name" placeholder="Your Name" required style="width:100%;background:transparent;border:none;color:white;font-size:15px;font-family:'Times New Roman', Times, serif;outline:none;padding:12px 0;" />
@@ -648,7 +680,7 @@
       <span style="font-weight: 400; font-style: italic; opacity: 0.8;">meets</span>
       <span>Booking.com</span>
     </div>
-    <p class="hero-sub">Discover the world's most beautiful travel experiences through short-form video. Watch, fall in love, and book — all in one swipe.</p>
+    <p class="hero-sub">Discover the world's most beautiful travel experiences through short-form video. Watch, fall in love, and book all in one swipe.</p>
     <div class="hero-ctas">
       <a class="btn-hero-primary" href="#" id="heroWlBtn">
         Join Waitlist
@@ -1118,7 +1150,7 @@
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>One-tap booking with secure payment</li>
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>AI-matched to your travel style and past trips</li>
       </ul>
-      <button class="btn-panel"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="3,2 13,7 3,12" fill="white"/></svg>Watch Experiences</button>
+      <a href="https://whatsapp.com/channel/0029Vb607Rw9mrGbOR7YFV0t" class="watch-experiences-btn" target="_blank"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="3,2 13,7 3,12" fill="white"/></svg>Watch Experiences</a>
     </div>
    <iframe src="rotating.html" style="width:100%;height:590px;border:none;overflow:hidden;" scrolling="no"></iframe>
   </div>
@@ -1128,7 +1160,7 @@
   <div class="panel" id="panel-travelpreneur">
     <div>
       <h3 class="panel-title">Open your travel store.<br>Earn on every booking.</h3>
-      <p class="panel-desc">Open your Tourifique store and stock it with world-class experiences like Summit One Vanderbilt. Every time someone books from your store, you earn — up to 70% revenue share. No inventory, no logistics, no customer service.</p>
+      <p class="panel-desc">Open your Tourifique store and stock it with world-class experiences like Summit One Vanderbilt. Every time someone books from your store, you earn  up to 70% revenue share. No inventory, no logistics, no customer service.</p>
       <ul class="feature-list">
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>Commission tiers from Bronze 40% to Platinum 70%</li>
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>Real-time earnings dashboard and analytics</li>
@@ -1421,7 +1453,7 @@
   <div class="panel" id="panel-supplier">
     <div>
       <h3 class="panel-title">Reach thousands of<br>qualified travelers</h3>
-      <p class="panel-desc">List your experiences and let a network of Travelpreneurs &trade; promote them. You focus on delivering great experiences — we handle the marketing and bookings.</p>
+      <p class="panel-desc">List your experiences and let a network of Travelpreneurs &trade; promote them. You focus on delivering great experiences -we handle the marketing and bookings.</p>
       <ul class="feature-list">
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>List tours, hotels, safaris, and 60+ experience types</li>
         <li class="feature-item"><div class="check-circle"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3" stroke="#6B47C8" stroke-width="1.5" fill="none"/></svg></div>Manage availability, pricing, and seasonal rates</li>
@@ -2072,7 +2104,7 @@
     <li><a href="#">Privacy</a></li>
     <li><a href="#">Terms</a></li>
     <li><a href="#" id="footerContactBtn">Contact</a></li>
-    <li><a href="#">Careers</a></li>
+   
   </ul>
   <div class="footer-social" aria-label="Social media links">
     <a class="social-icon" href="https://www.tiktok.com/@tourifique" aria-label="TikTok" title="TikTok" target="_blank" rel="noopener noreferrer">
@@ -2961,6 +2993,7 @@
 </script>
 </body>
 </html>
+
 
 
 
