@@ -398,7 +398,7 @@
   <button class="ctrl-btn" id="next">&#8594;</button>
 </div>
 
-<div class="hint"><span class="hint-dot"></span>Slow rotating · Hover to pause · Drag to spin</div>
+<div class="hint"><span class="hint-dot"></span>Slow rotating · Drag to spin</div>
 
 <script>
 /* ───────────────────────────────────────────
@@ -790,10 +790,8 @@ function updateActiveStates() {
   dots.forEach((d, i) => d.classList.toggle('active', i === front));
 }
 
-/* ── Pause on hover ── */
+/* ── Get Stage ── */
 const stage = document.getElementById('stage');
-stage.addEventListener('mouseenter', () => { paused = true; });
-stage.addEventListener('mouseleave', () => { if (!isDragging) paused = false; });
 
 /* ── Drag to spin ── */
 stage.addEventListener('pointerdown', e => {
