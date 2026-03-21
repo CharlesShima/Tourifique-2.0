@@ -798,7 +798,7 @@ stage.addEventListener('pointerdown', e => {
   dragStart   = e.clientX;
   angleAtDrag = angle;
   isDragging  = false;
-  paused      = true;
+  // Don't pause rotation on pointerdown - only pause when actually dragging
   carousel.classList.remove('easing');
   stage.setPointerCapture(e.pointerId);
 });
@@ -806,7 +806,10 @@ stage.addEventListener('pointerdown', e => {
 stage.addEventListener('pointermove', e => {
   if (dragStart === null) return;
   const dx = e.clientX - dragStart;
-  if (Math.abs(dx) > 4) isDragging = true;
+  if (Math.abs(dx) > 4) {
+    isDragging = true;
+    paused = true;  // Only pause when user is actively dragging
+  }
   if (!isDragging) return;
   angle = angleAtDrag + dx * 0.35;
 });
@@ -815,7 +818,7 @@ stage.addEventListener('pointerup', e => {
   if (dragStart === null) return;
   dragStart  = null;
   isDragging = false;
-  paused     = false; // resume slow spin
+  paused     = false; // resume rotation when drag ends
 });
 
 /* ── Arrow buttons ── */
