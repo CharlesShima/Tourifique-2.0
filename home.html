@@ -2567,7 +2567,8 @@
     navWlBtn.textContent = "You're in!";
     navWlBtn.style.background = '#3B2072';
     navWlBtn.style.color = 'white';
-    navWlBtn.disabled = true;
+    navWlBtn.style.pointerEvents = 'none';
+    navWlBtn.removeAttribute('href');
     navbarWlModal.style.display = 'none';
   });
 
@@ -2621,7 +2622,8 @@
     navWlBtn.textContent = "You're in!";
     navWlBtn.style.background = '#3B2072';
     navWlBtn.style.color = 'white';
-    navWlBtn.disabled = true;
+    navWlBtn.style.pointerEvents = 'none';
+    navWlBtn.removeAttribute('href');
     navbarWlModal.style.display = 'none';
   });
 
@@ -2681,7 +2683,8 @@
     navWlBtn.textContent = "You're in!";
     navWlBtn.style.background = '#3B2072';
     navWlBtn.style.color = 'white';
-    navWlBtn.disabled = true;
+    navWlBtn.style.pointerEvents = 'none';
+    navWlBtn.removeAttribute('href');
     navbarWlModal.style.display = 'none';
   });
 
@@ -2848,117 +2851,117 @@
 
   // ===== HERO TRAVELER FORM SUBMIT =====
   document.getElementById('heroWlSubmitTraveler').addEventListener('click', () => {
-    const firstName = document.getElementById('heroTravelerFirstName').value.trim();
-    const lastName = document.getElementById('heroTravelerLastName').value.trim();
-    const email = document.getElementById('heroTravelerEmail').value.trim();
-    const errorEl = document.getElementById('heroTravelerError');
-
-    if (!firstName || !lastName || !email || !email.includes('@')) {
-      errorEl.style.opacity = '1';
-      return;
+    const firstName = document.getElementById('heroTravelerFirstName')?.value.trim() || '';
+    const lastName = document.getElementById('heroTravelerLastName')?.value.trim() || '';
+    const email = document.getElementById('heroTravelerEmail')?.value.trim() || '';
+    
+    if (firstName && lastName && email) {
+      // SAVE EMAIL TO LOCALSTORAGE
+      const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+      if (!submittedEmails.includes(email.toLowerCase())) {
+        submittedEmails.push(email.toLowerCase());
+        localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+      }
+      
+      const data = {
+        formType: 'hero_traveler_signup',
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        submittedAt: new Date().toLocaleString()
+      };
+      showCongratulationsModal();
+      sendToGoogleAppsScript(data);
+      heroWlBtn.textContent = "You're in!";
+      heroWlBtn.style.background = '#3B2072';
+      heroWlBtn.style.color = 'white';
+      heroWlBtn.style.pointerEvents = 'none';
+      heroWlBtn.removeAttribute('href');
+      heroWlModal.style.display = 'none';
+    } else {
+      document.getElementById('heroTravelerError').style.opacity = '1';
     }
-
-    errorEl.style.opacity = '0';
-    
-    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
-    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
-    if (!submittedEmails.includes(email.toLowerCase())) {
-      submittedEmails.push(email.toLowerCase());
-      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
-    }
-    
-    const travelerData = { firstName, lastName, email, formType: 'hero_traveler_signup', submittedAt: new Date().toLocaleString() };
-    console.log('📊 Hero Traveler signup:', travelerData);
-    
-    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
-    showCongratulationsModal();
-    
-    // Send data in background
-    sendToGoogleAppsScript(travelerData);
-    
-    heroWlBtn.textContent = "You're in!";
-    heroWlBtn.style.background = '#3B2072';
-    heroWlBtn.style.color = 'white';
-    heroWlBtn.disabled = true;
-    heroWlModal.style.display = 'none';
   });
 
   // ===== HERO SUPPLIER FORM SUBMIT =====
+  // ===== HERO SUPPLIER FORM SUBMIT =====
   document.getElementById('heroWlSubmitSupplier').addEventListener('click', () => {
-    const firstName = document.getElementById('heroSupplierFirstName').value.trim();
-    const lastName = document.getElementById('heroSupplierLastName').value.trim();
-    const companyName = document.getElementById('heroSupplierCompanyName').value.trim();
-    const email = document.getElementById('heroSupplierEmail').value.trim();
-    const errorEl = document.getElementById('heroSupplierError');
-
-    if (!firstName || !lastName || !companyName || !email || !email.includes('@')) {
-      errorEl.style.opacity = '1';
-      return;
+    const firstName = document.getElementById('heroSupplierFirstName')?.value.trim() || '';
+    const lastName = document.getElementById('heroSupplierLastName')?.value.trim() || '';
+    const companyName = document.getElementById('heroSupplierCompanyName')?.value.trim() || '';
+    const email = document.getElementById('heroSupplierEmail')?.value.trim() || '';
+    
+    if (firstName && lastName && companyName && email) {
+      // SAVE EMAIL TO LOCALSTORAGE
+      const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+      if (!submittedEmails.includes(email.toLowerCase())) {
+        submittedEmails.push(email.toLowerCase());
+        localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+      }
+      
+      const data = {
+        formType: 'hero_supplier_signup',
+        firstName: firstName,
+        lastName: lastName,
+        companyName: companyName,
+        email: email,
+        submittedAt: new Date().toLocaleString()
+      };
+      showCongratulationsModal();
+      sendToGoogleAppsScript(data);
+      heroWlBtn.textContent = "You're in!";
+      heroWlBtn.style.background = '#3B2072';
+      heroWlBtn.style.color = 'white';
+      heroWlBtn.style.pointerEvents = 'none';
+      heroWlBtn.removeAttribute('href');
+      heroWlModal.style.display = 'none';
+      heroWlModal.style.pointerEvents = 'none';
+      heroWlModal.style.visibility = 'hidden';
+    } else {
+      document.getElementById('heroSupplierError').style.opacity = '1';
     }
-
-    errorEl.style.opacity = '0';
-    
-    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
-    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
-    if (!submittedEmails.includes(email.toLowerCase())) {
-      submittedEmails.push(email.toLowerCase());
-      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
-    }
-    
-    const supplierData = { firstName, lastName, companyName, email, formType: 'hero_supplier_signup', submittedAt: new Date().toLocaleString() };
-    console.log('📊 Hero Supplier signup:', supplierData);
-    
-    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
-    showCongratulationsModal();
-    
-    // Send data in background
-    sendToGoogleAppsScript(supplierData);
-    
-    heroWlBtn.textContent = "You're in!";
-    heroWlBtn.style.background = '#3B2072';
-    heroWlBtn.style.color = 'white';
-    heroWlBtn.disabled = true;
-    heroWlModal.style.display = 'none';
   });
 
   // ===== HERO TRAVELPRENEUR FORM SUBMIT =====
   document.getElementById('heroWlSubmitTravelpreneur').addEventListener('click', () => {
-    const firstName = document.getElementById('heroTravelpreneurFirstName').value.trim();
-    const lastName = document.getElementById('heroTravelpreneurLastName').value.trim();
-    const email = document.getElementById('heroTravelpreneurEmail').value.trim();
-    const tiktok = document.getElementById('heroTiktokHandle').value.trim();
-    const instagram = document.getElementById('heroInstagramHandle').value.trim();
-    const snapchat = document.getElementById('heroSnapchatHandle').value.trim();
-    const errorEl = document.getElementById('heroTravelpreneurError');
-
-    if (!firstName || !lastName || !email || !email.includes('@')) {
-      errorEl.style.opacity = '1';
-      return;
+    const firstName = document.getElementById('heroTravelpreneurFirstName')?.value.trim() || '';
+    const lastName = document.getElementById('heroTravelpreneurLastName')?.value.trim() || '';
+    const email = document.getElementById('heroTravelpreneurEmail')?.value.trim() || '';
+    const tiktok = document.getElementById('heroTiktokHandle')?.value.trim() || '';
+    const instagram = document.getElementById('heroInstagramHandle')?.value.trim() || '';
+    const snapchat = document.getElementById('heroSnapchatHandle')?.value.trim() || '';
+    
+    if (firstName && lastName && email) {
+      // SAVE EMAIL TO LOCALSTORAGE
+      const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
+      if (!submittedEmails.includes(email.toLowerCase())) {
+        submittedEmails.push(email.toLowerCase());
+        localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
+      }
+      
+      const data = {
+        formType: 'hero_travelpreneur_signup',
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        tiktok: tiktok,
+        instagram: instagram,
+        snapchat: snapchat,
+        submittedAt: new Date().toLocaleString()
+      };
+      showCongratulationsModal();
+      sendToGoogleAppsScript(data);
+      heroWlBtn.textContent = "You're in!";
+      heroWlBtn.style.background = '#3B2072';
+      heroWlBtn.style.color = 'white';
+      heroWlBtn.style.pointerEvents = 'none';
+      heroWlBtn.removeAttribute('href');
+      heroWlModal.style.display = 'none';
+      heroWlModal.style.pointerEvents = 'none';
+      heroWlModal.style.visibility = 'hidden';
+    } else {
+      document.getElementById('heroTravelpreneurError').style.opacity = '1';
     }
-
-    errorEl.style.opacity = '0';
-    
-    // SAVE EMAIL TO LOCALSTORAGE (instant duplicate detection)
-    const submittedEmails = JSON.parse(localStorage.getItem('submittedEmails') || '[]');
-    if (!submittedEmails.includes(email.toLowerCase())) {
-      submittedEmails.push(email.toLowerCase());
-      localStorage.setItem('submittedEmails', JSON.stringify(submittedEmails));
-    }
-    
-    const travelpreneurData = { firstName, lastName, email, tiktok, instagram, snapchat, formType: 'hero_travelpreneur_signup', submittedAt: new Date().toLocaleString() };
-    console.log('📊 Hero Travelpreneur signup:', travelpreneurData);
-    
-    // SHOW CONGRATULATIONS MODAL IMMEDIATELY
-    showCongratulationsModal();
-    
-    // Send data in background
-    sendToGoogleAppsScript(travelpreneurData);
-    
-    heroWlBtn.textContent = "You're in!";
-    heroWlBtn.style.background = '#3B2072';
-    heroWlBtn.style.color = 'white';
-    heroWlBtn.disabled = true;
-    heroWlModal.style.display = 'none';
   });
 
   // ===== GOOGLE APPS SCRIPT INTEGRATION =====
@@ -3131,7 +3134,8 @@
         wlBtn.textContent = "You're in!";
         wlBtn.style.background = '#3B2072';
         wlBtn.style.color = 'white';
-        wlBtn.disabled = true;
+        wlBtn.style.pointerEvents = 'none';
+        wlBtn.removeAttribute('href');
         roleModal.style.display = 'none';
       } else {
         document.getElementById('wlTravelerError').style.opacity = '1';
@@ -3178,7 +3182,8 @@
         wlBtn.textContent = "You're in!";
         wlBtn.style.background = '#3B2072';
         wlBtn.style.color = 'white';
-        wlBtn.disabled = true;
+        wlBtn.style.pointerEvents = 'none';
+        wlBtn.removeAttribute('href');
         roleModal.style.display = 'none';
       } else {
         document.getElementById('wlSupplierError').style.opacity = '1';
@@ -3230,7 +3235,8 @@
         wlBtn.textContent = "You're in!";
         wlBtn.style.background = '#3B2072';
         wlBtn.style.color = 'white';
-        wlBtn.disabled = true;
+        wlBtn.style.pointerEvents = 'none';
+        wlBtn.removeAttribute('href');
         roleModal.style.display = 'none';
       } else {
         document.getElementById('wlTravelpreneurError').style.opacity = '1';
